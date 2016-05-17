@@ -1,0 +1,157 @@
+body {
+	padding: 0;
+	margin:0;
+	width:100%;
+	background-color: #000;
+}
+span {
+	padding: 10px 0 0 0;
+	margin:0 auto;
+	color:red;
+	text-align:center;
+	display: block;
+}
+h1 {
+	padding:15px;
+	margin:0;
+	background-color:#ddd;
+	text-align:center;
+	border-radius:8px 8px 0 0;
+	border-bottom: 1px solid #ccc;
+	text-align: center;
+}
+h3 {
+	padding: 0 12px 8px 44px;
+	margin: 0;
+	text-align:left;
+	color: #777;
+}
+#login {
+	padding: 0 0 16px 0;
+	margin: 70px auto;
+	width:380px;
+	border-radius:10px;
+	font-family:helvetica;
+	border:2px solid #ccc;
+	background-color:#eee;
+}
+#outside {
+	padding: 0;
+	margin: 70px;
+	border-radius:10px;
+	font-family:helvetica;
+	border:2px solid #ccc;
+	background-color:#eee;
+}
+#scroller {
+	 overflow-y: hidden; overflow-x: auto;
+}
+#room,#password {
+	padding:10px;
+	width:100%;
+	border:1px solid #ccc;
+	font-size:16px;
+	font-family:raleway;
+	box-sizing: border-box;
+}
+input[type=submit], button { 
+	width:100%;
+	background-color:#DD0000;
+	color:#fff;
+	border:2px solid #FF0000;
+	padding:10px;
+	font-size:20px;
+	cursor:pointer;
+	border-radius:5px;
+	margin:6px 0 0;
+	box-sizing: border-box;
+}
+input[type=submit]:hover , button:hover{
+	background-color:#EE0000;
+	border:2px solid #FF0000;
+}
+.padding {
+	padding:0 40px;
+}
+.pages {
+	padding-top:10px;
+	text-align:center;
+}
+.pages b {
+	background-color: #FFF;
+	padding:5px;
+	border: solid 2px black;
+	display: inline-block;
+	margin: 8px 2px 0;
+	min-width:18px;
+	height: 22px;
+}
+.pages a {
+	text-decoration: none;
+	color: #FFF;
+	background-color: #777;
+	padding:5px;
+	border: solid 2px black;
+	display: inline-block;
+	margin: 8px 2px 0;
+	min-width:18px;
+	height: 22px;
+}
+.pages a:hover {
+	background-color: #999;
+}
+.login {
+	padding-top: 20px;
+}
+.center {
+	text-align:center;
+	margin: 0 auto;
+	width: 100%;
+	display: block;
+	padding: 0;
+}
+.titlepadding {
+	padding: 8px 0 0 2px ;
+}
+#options {
+	max-width:500px;
+	margin: 0 auto 20px;
+	padding: 0;
+}
+#options h1 {
+	padding: 0;
+	margin: 0; 
+}
+#outside input.text{
+	padding:10px;
+	width:100%;
+	border:1px solid #ccc;
+	font-size:16px;
+	font-family:raleway;
+	box-sizing: border-box;
+}
+#logout {
+	max-width: 200px;
+	padding: 10px 20px 20px;
+	margin: auto;
+}
+#main {
+	width: 100%;
+	padding: 0;
+}
+table#main tr:nth-child(even) {
+    background-color: #eee;
+}
+table#main tr:nth-child(odd) {
+   background-color:#fff;
+}
+table#main th	{
+    background-color: black;
+    color: white;
+}
+
+@media screen and (max-width: 720px) {
+    #outside {
+       margin: 10px;
+    }
+}
