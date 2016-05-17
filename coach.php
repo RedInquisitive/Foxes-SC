@@ -58,7 +58,7 @@ if(isset($_SESSION['login_user']) && $_SESSION['valid'] = "Coach"){
 		<div id="login">
 			<h1>Coach Login</h1>
 			<form class="login" method="post">
-				<h3>Coach Username: </h3><div class="padding"><input type="text" id="room" name="room"></div><br>
+				<h3>Coach Username: </h3><div class="padding"><input type="text" id="username" name="username"></div><br>
 				<h3>Password: </h3><div class="padding"><input type="password" id="password" name="password"></div><br>
 				<div class="padding"><input type="submit" value=" Login "></div>
 				<span id="error"><?php echo $error?></span>
