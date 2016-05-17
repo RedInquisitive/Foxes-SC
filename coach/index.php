@@ -42,28 +42,29 @@ try {
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
+<div id="navbar">
+	<div id="header" style="margin: 0;">
+		<a href="projector.php"><div class="headlink" id="projector"><div class="textheadlink">Projector View</div></div></a>
+		<a href="laptop.php"><div class="headlink" id="laptop"><div class="textheadlink">Laptop View</div></div></a>
+		<a href="links.php"><div class="headlink" id="links"><div class="textheadlink">Modify Links</div></div></a>
+		<a href="students.php"><div class="headlink" id="students"><div class="textheadlink">Modify Students</div></div></a>
+		<a href="classes.php"><div class="headlink" id="classes"><div class="textheadlink">Modify Classes</div></div></a>
+	</div>
 
-<div id="header">
-	<a href="projector.php"><div class="headlink" id="projector"><div class="textheadlink">Projector View</div></div></a>
-	<a href="laptop.php"><div class="headlink" id="laptop"><div class="textheadlink">Laptop View</div></div></a>
-	<a href="links.php"><div class="headlink" id="links"><div class="textheadlink">Modify Links</div></div></a>
-	<a href="students.php"><div class="headlink" id="students"><div class="textheadlink">Modify Students</div></div></a>
-	<a href="classes.php"><div class="headlink" id="classes"><div class="textheadlink">Modify Classes</div></div></a>
-</div>
-
-<div id="dropdowns">
-<form method="get" style="float: left;">
-    <select name='period' onchange='if(this.value != 0) {this.form.submit();}'>
-         <option value='Select'>Select Period</option>
-         <option value='All'>All Periods</option>
-    </select>
-</form>
-<form method="get" style="float: right;">
-    <select name='semester' onchange='if(this.value != 0) {this.form.submit();}'>
-         <option value='Select'>Select Semester</option>
-         <option value='S2016'>Spring 2016</option>
-    </select>
-</form>
+	<div id="dropdowns" style="margin: 0;">
+	<form method="get" style="float: left;">
+		<select name='period' onchange='if(this.value != 0) {this.form.submit();}'>
+			 <option value='Select'>Select Period</option>
+			 <option value='All'>All Periods</option>
+		</select>
+	</form>
+	<form method="get" style="float: right;">
+		<select name='semester' onchange='if(this.value != 0) {this.form.submit();}'>
+			 <option value='Select'>Select Semester</option>
+			 <option value='S2016'>Spring 2016</option>
+		</select>
+	</form>
+	</div>
 </div>
 
 <div id="body">
