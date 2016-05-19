@@ -30,7 +30,7 @@ try {
 <body>
 <div id="navbar">
 	<div id="exit" style="margin: 0;">
-		<a href="index.php"><div class="headlink"><div class="textheadlink">Exit</div></div></a>
+		<a href="index.php"><div class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">Exit</div></div></a>
 	</div>
 	<form method="post" style="float: left;">
 		<select name='semester' onchange='if(this.value != 0) {this.form.submit();}'>
