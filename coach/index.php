@@ -3,21 +3,7 @@
 #INCLUDE AND START SESSION
 include '/home/aj4057/config.php'; #Define $servername $username $password $dbname and $configready here.
 session_start();
-if(!isset($_SESSION['login_user']) || !isset($_SESSION['timestamp']) || !isset($_SESSION['valid'])) { 
-	header("location: logout.php");
-	die();
-}
-
-if(strtotime(date("Y-m-d H:i:s")) - strtotime($_SESSION['timestamp']) > 60*60 ){
-	$_SESSION['valid'] = "false"; //Makes sure the session is killed.
-	header("location: logout.php");
-	die();
-}
-
-if($_SESSION['valid'] !== "Coach") {
-	header("location: logout.php");
-	die();
-}
+include '/home/aj4057/checkaccess.php';
 
 #Do while loop allows me to terminate the task at hand.
 do {
@@ -52,23 +38,24 @@ try {
 	</div>
 
 	<div id="dropdowns" style="margin: 0;">
-	<form method="get" style="float: left;">
-		<select name='period' onchange='if(this.value != 0) {this.form.submit();}'>
-			 <option value='Select'>Select Period</option>
-			 <option value='All'>All Periods</option>
-		</select>
-	</form>
-	<form method="get" style="float: right;">
+	<form method="post" style="float: left;">
 		<select name='semester' onchange='if(this.value != 0) {this.form.submit();}'>
 			 <option value='Select'>Select Semester</option>
 			 <option value='S2016'>Spring 2016</option>
 		</select>
 	</form>
+	<form method="post" style="float: right;">
+		<select name='period' onchange='if(this.value != 0) {this.form.submit();}'>
+			 <option value='Select'>Select Period</option>
+			 <option value='All'>All Periods</option>
+		</select>
+	</form>
+
 	</div>
 </div>
 
 <div id="body">
-	<h1>Results for: (period, simester)</h1>
+	<h1>Results for: (period, semester)</h1>
 	<table>
 		<tr>
 			<th colspan="5">Dead Lift</th>
@@ -95,7 +82,7 @@ try {
 	
 	<table>
 		<tr>
-			<th colspan="5">Back Squat</th>
+			<th colspan="5">Bench</th>
 		</tr><tr>
 			<td></td>
 			<td>Pre</td>
@@ -119,7 +106,7 @@ try {
 	
 	<table>
 		<tr>
-			<th colspan="5">Other Thing?</th>
+			<th colspan="5">Back Squat</th>
 		</tr><tr>
 			<td></td>
 			<td>Pre</td>
