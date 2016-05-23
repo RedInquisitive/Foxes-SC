@@ -55,8 +55,8 @@ try {
 				</td>
 				<td>
 					<h1>Enter your info!</h1>
-					<select name='period' style="width: 100% !important; min-width: 10px !important;">
-						 <option value='All' style="width: 100% !important;">Week 1</option>
+					<select name='period' class="classestext">
+						 <option value='All'>Week 1</option>
 					</select>
 					<h3 class="titlepadding">Dead Lift</h3>
 					<input id="deadlift"	class="text" 		type="number" 		name="deadlift" placeholder="Enter Reps Here"><br>
