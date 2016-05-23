@@ -55,7 +55,7 @@ try {
 					   name="createperiodname"
 					   placeholder="ex: Period 1"><br>
 
-			<div class="padding"><input type="submit"	value="Create Period!" style="background-color: #0A0; border: 2px solid #0C0;"></div>
+			<div class="padding"><input type="submit"	value="Create Period!" class="goodbutton"></div>
 		</form><br>
 	</div>
 </div>
@@ -83,37 +83,6 @@ try {
 				</select>
 			
 			<div class="padding"><input type="submit"	value="Procede to next step..."></div>
-		</form><br>
-	</div>
-</div>
-
-<div class="pseudobody">
-	<h1>Rename</h1>
-		<div class="center">
-		<form method="post">
-			<h3 class="titlepadding">Rename semester</h3>
-				<select name='renamesemester' class="classestext">
-					 <option value='nothing' style="width: 100%;">Select semester</option>
-				</select>
-				<input class="text" 		
-					   type="text" 		
-					   name="renamesemestername" 
-					   placeholder="Input new name..."><br>
-				
-			<div class="padding"><input type="submit"	value="Rename semester!" style="background-color: #0A0; border: 2px solid #0C0;"></div>
-		</form>
-	</div>
-	
-	<br><br><br>
-	
-	<div class="center">
-		<form method="get">
-			<h3 class="titlepadding">Rename period from semester...</h3>
-				<select name='renameperiodsemester' class="classestext">
-					 <option value='nothing' style="width: 100%;">Select semester</option>
-				</select>
-				
-			<div class="padding"><input type="submit"	value="Procede to next step..." style="background-color: #0A0; border: 2px solid #0C0;"></div>
 		</form><br>
 	</div>
 </div>

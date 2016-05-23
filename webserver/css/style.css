@@ -84,6 +84,14 @@ h3 {
 	background-color:#eee;
 }
 
+.pseudobody {
+	padding: 0;
+	margin: 10px 10px;
+	border-radius:10px;
+	border:2px solid #ccc;
+	background-color:#eee;
+}
+
 .headlink {
 	display: inline-block;
 	box-sizing: border-box;
@@ -124,6 +132,15 @@ h3 {
 	font-family:raleway;
 	box-sizing: border-box;
 }
+select.classestext{
+	width: 100%; 
+	min-width: 10px;
+	font-size: 16px;
+	font-family: raleway;
+	padding:10px;
+	border:1px solid #ccc;
+	box-sizing: border-box;
+}
 .titlepadding {
     padding: 8px 0px 0px 2px;
 }
@@ -133,6 +150,7 @@ select {
 	font-size: 22px;
 	min-width:300px;
 }
+
 input[type=submit], button { 
 	width:100%;
 	background-color:#DD0000;
@@ -145,11 +163,19 @@ input[type=submit], button {
 	margin:6px 0 0;
 	box-sizing: border-box;
 }
+input[type=submit].goodbutton, button.goodbutton {
+	background-color: #0A0;
+	border: 2px solid #0C0;
+}
+
 input[type=submit]:hover , button:hover{
 	background-color:#EE0000;
 	border:2px solid #FF0000;
 }
-
+input[type=submit].goodbutton:hover , button.goodbutton:hover{
+	background-color:#0B0;
+	border:2px solid #0D0;
+}
 
 table {
     border-collapse: collapse;
