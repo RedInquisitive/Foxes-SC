@@ -1,7 +1,6 @@
 <!-- 
 <?php
-include '/home/aj4057/config.php'; #Define $servername $username $password $dbname and $configready here.
-include '/home/aj4057/indexkeys.php'; #Index keys that are used. For example, Index::REQUEST is defined here.
+include '/home/aj4057/config_iron.php'; #Define $servername $username $password $dbname and $configready here.
 
 do {
 session_start(); #Starting Session
@@ -16,27 +15,33 @@ try {
 }
 
 if (!empty($_POST)) {
-	if(!(array_key_exists(Coach::USERNAME,$_POST)
-	  && array_key_exists(Coach::PASSWORD,$_POST))) {
+	if(!(array_key_exists("username",$_POST)
+	  && array_key_exists("password",$_POST))) {
 		$error = "You need to enter the username and password.";
 		break;
 	}
-	if($_POST[Coach::USERNAME] === '' || $_POST[Coach::PASSWORD] === '' ) {
+	
+	if($_POST["username"] === '' || $_POST["password"] === '') {
 		$error = "You need to enter the username and password.";
 		break;
 	}
-	$stmt = $conn->prepare("SELECT USERNAME, PASSWORD FROM COACH WHERE USERNAME = :username"); #select data
-	$stmt->execute(array('username' => $_POST[Coach::USERNAME])); #based on the room
+	
+	$stmt = $conn->prepare("SELECT USERNAME, PASSWORD FROM COACH WHERE USERNAME = :username");
+	$stmt->execute(array('username' => $_POST["username"]));
 	$row = $stmt->fetch();
-	if($row["PASSWORD"] !== $_POST[Index::PASSWORD]) { #if the password hash is not the stored hash
-		$error = "The username or password is incorrect!"; #Deny it.
+	
+	if(!(password_verify($_POST["password"], $row["PASSWORD"]))) {
+		$error = "The username or password is incorrect!"; 
 		break;
 	}
+	
 	$_SESSION['login_user'] = $row["USERNAME"]; #Initializing Session
 	$_SESSION['timestamp'] = date("Y-m-d H:i:s"); #Initializing Session
 	$_SESSION['valid'] = "Coach";
+	
 	header("location: admin/index.php"); #Redirecting To Other Page
 	$conn = null;
+	die();
 }
 
 if(isset($_SESSION['login_user']) && $_SESSION['valid'] = "Coach"){

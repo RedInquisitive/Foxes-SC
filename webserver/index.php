@@ -1,3 +1,7 @@
+<?php 
+	header("Location: student.php"); 
+	die(); #Comment this line to get a button page. 
+?>
 <!DOCTYPE html>
 <html>
 <header>
