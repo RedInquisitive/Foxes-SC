@@ -1,24 +1,6 @@
-<!--
 <?php
-#INCLUDE AND START SESSION
-include '/home/aj4057/config.php'; #Define $servername $username $password $dbname and $configready here.
-session_start();
-include '/home/aj4057/checkaccess.php';
-
-#Do while loop allows me to terminate the task at hand.
-do {
-#Connect to database
-try {
-	$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-	$error = "Could not connect to the database. This should never happen.";
-	break;
-}
-
-}
+	include '/home/aj4057/verify_iron.php';
 ?>
--->
 <!DOCTYPE html>
 <html>
 <head>

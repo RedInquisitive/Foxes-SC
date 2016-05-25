@@ -1,4 +1,3 @@
-<!-- 
 <?php
 include '/home/aj4057/config_iron.php'; #Define $servername $username $password $dbname and $configready here.
 
@@ -17,12 +16,12 @@ try {
 if (!empty($_POST)) {
 	if(!(array_key_exists("username",$_POST)
 	  && array_key_exists("password",$_POST))) {
-		$error = "You need to enter the username and password.";
+		$error = "You need to enter a username and password.";
 		break;
 	}
 	
 	if($_POST["username"] === '' || $_POST["password"] === '') {
-		$error = "You need to enter the username and password.";
+		$error = "You need to enter a username and password.";
 		break;
 	}
 	
@@ -39,17 +38,16 @@ if (!empty($_POST)) {
 	$_SESSION['timestamp'] = date("Y-m-d H:i:s"); #Initializing Session
 	$_SESSION['valid'] = "Coach";
 	
-	header("location: admin/index.php"); #Redirecting To Other Page
+	header("location: /coach/index.php"); #Redirecting To Other Page
 	$conn = null;
 	die();
 }
 
 if(isset($_SESSION['login_user']) && $_SESSION['valid'] = "Coach"){
-	header("location: coach/index.php");
+	header("location: /coach/index.php");
 }
 } while (0); #but it works!
 ?>
--->
 <!DOCTYPE html>
 <html>
 <header>
