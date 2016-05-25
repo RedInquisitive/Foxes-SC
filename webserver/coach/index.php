@@ -1,5 +1,6 @@
 <?php
-	include '/home/aj4057/verify_iron.php';
+include '/home/aj4057/verify_iron.php';
+include '/home/aj4057/connect_iron.php'; #Connect to db.
 ?>
 <!DOCTYPE html>
 <html>

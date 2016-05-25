@@ -1,18 +1,10 @@
 <?php
 include '/home/aj4057/config_iron.php'; #Define $servername $username $password $dbname and $configready here.
-
-do {
+include '/home/aj4057/connect_iron.php'; #Connect to db.
 session_start(); #Starting Session
 $error=''; #Variable To Store Error Message
 
-try {
-	$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); #login
-	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); #Enable errors
-} catch(PDOException $e) {
-	$error = "Could not connect to the database. This should never happen.";
-	break;
-}
-
+do {
 if (!empty($_POST)) {
 	if(!(array_key_exists("username",$_POST)
 	  && array_key_exists("password",$_POST))) {
@@ -35,16 +27,13 @@ if (!empty($_POST)) {
 	}
 	
 	$_SESSION['login_user'] = $row["USERNAME"]; #Initializing Session
-	$_SESSION['timestamp'] = date("Y-m-d H:i:s"); #Initializing Session
+	$_SESSION['timestamp'] = date("Y-m-d H:i:s");
 	$_SESSION['valid'] = "Coach";
-	
-	header("location: /coach/index.php"); #Redirecting To Other Page
-	$conn = null;
-	die();
 }
 
-if(isset($_SESSION['login_user']) && $_SESSION['valid'] = "Coach"){
+if(isset($_SESSION['login_user']) && $_SESSION['valid'] === "Coach"){
 	header("location: /coach/index.php");
+	die();
 }
 } while (0); #but it works!
 ?>
