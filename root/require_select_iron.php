@@ -1,15 +1,28 @@
 <?php
 session_start(); #Starting Session
+if(!isset($_SESSION["SEMESTER_GLOBAL"])) {
+	$stmt = $conn->prepare("SELECT SEMESTER FROM CLASS ORDER BY DESC");
+	$stmt->execute();
+	$row = $stmt->fetch();
+	$_SESSION["SEMESTER_GLOBAL"] = $row["SEMESTER"];
+}
+
+if(isset($_POST["SEMESTER_GLOBAL"])) {
+	$_SESSION["SEMESTER_GLOBAL"] = $_POST["SEMESTER_GLOBAL"];
+}
+if(isset($_POST["PERIOD_GLOBAL"])) {
+	$_SESSION["PERIOD_GLOBAL"] = $_POST["PERIOD_GLOBAL"];
+}
 if(!isset($_SESSION["SEMESTER"]) || !isset($_SESSION["PERIOD"]) || $_SESSION["SEMESTER"] === "NOTHING" || $_SESSION["PERIOD"] === "NOTHING") {?>
 	<div id="dropdowns" style="margin: 0;">
 		<form method="post" style="float: left;">
-			<select name='semester' onchange='if(this.value != 0) {this.form.submit();}'>
+			<select name='SEMESTER_GLOBAL' onchange='if(this.value != 0) {this.form.submit();}'>
 				 <option value='Select'>Select Semester</option>
 				 <option value='S2016'>Spring 2016</option>
 			</select>
 		</form>
 		<form method="post" style="float: right;">
-			<select name='period' onchange='if(this.value != 0) {this.form.submit();}'>
+			<select name='PERIOD_GLOBAL' onchange='if(this.value != 0) {this.form.submit();}'>
 				 <option value='Select'>Select Period</option>
 				 <option value='All'>All Periods</option>
 			</select>

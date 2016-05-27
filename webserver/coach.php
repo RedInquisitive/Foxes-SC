@@ -1,7 +1,6 @@
 <?php
 $error=""; #Variable To Store Error Message
 include '/home/aj4057/config_iron.php'; #Define $servername $username $password $dbname and $configready here.
-include '/home/aj4057/connect_iron.php'; #Connect to db.
 session_start(); #Starting Session
 
 do {

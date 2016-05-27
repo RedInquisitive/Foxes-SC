@@ -7,8 +7,7 @@ $semesterBuilder = array();
 $periodBuilder = array();
 
 include '/home/aj4057/verify_iron.php';
-include '/home/aj4057/config_iron.php';
-include '/home/aj4057/connect_iron.php'; #Connect to db.
+include '/home/aj4057/config_iron.php'; #Connect to db.
 
 $stmt = $conn->prepare("SELECT DISTINCT SEMESTER FROM CLASS");
 $stmt->execute();
