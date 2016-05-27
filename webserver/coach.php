@@ -1,10 +1,13 @@
 <?php
+$error=""; #Variable To Store Error Message
 include '/home/aj4057/config_iron.php'; #Define $servername $username $password $dbname and $configready here.
 include '/home/aj4057/connect_iron.php'; #Connect to db.
 session_start(); #Starting Session
-$error=''; #Variable To Store Error Message
 
 do {
+if($error !== "") {
+	break;
+}
 if (!empty($_POST)) {
 	if(!(array_key_exists("username",$_POST)
 	  && array_key_exists("password",$_POST))) {
