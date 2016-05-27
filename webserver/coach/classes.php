@@ -1,6 +1,113 @@
 <?php
+$conn = null;
+$error = "";
+$editError = "";
+$editSuccess = "";
+$semesterBuilder = array();
+$periodBuilder = array();
+
 include '/home/aj4057/verify_iron.php';
+include '/home/aj4057/config_iron.php';
 include '/home/aj4057/connect_iron.php'; #Connect to db.
+
+$stmt = $conn->prepare("SELECT DISTINCT SEMESTER FROM CLASS");
+$stmt->execute();
+$all = $stmt->fetchAll();
+foreach($all as $row) {
+	$semesterBuilder[] = 
+	'<option value="' . $row['SEMESTER'] .
+	'" style="width: 100%;">' . $row['SEMESTER'] . '</option>';
+}
+
+do {
+if((isset($_POST["CREATE_SEMESTER_NAME"]) || isset($_POST["CREATE_SEMESTER_SELECT"])) && isset($_POST["CREATE_SEMESTER_PERIOD"])) {
+	$stmt = $conn->prepare("SELECT SEMESTER, PERIOD FROM CLASS");
+	$stmt->execute();
+	$all = $stmt->fetchAll();
+	
+	if($_POST["CREATE_SEMESTER_SELECT"] !== "NOTHING") {
+		$_POST["CREATE_SEMESTER_NAME"] = $_POST["CREATE_SEMESTER_SELECT"];
+	}
+	foreach($all as $row) {
+		if(strtolower($_POST["CREATE_SEMESTER_NAME"]) === strtolower($row["SEMESTER"]) ||
+		   strtolower($_POST["CREATE_SEMESTER_SELECT"]) === strtolower($row["SEMESTER"])) {
+			if(strtolower($_POST["CREATE_SEMESTER_PERIOD"]) === strtolower($row["PERIOD"])) {
+				$editError = "That semester and period combination already exists!";
+				break 2;
+			}
+		}
+	}
+	
+	
+	
+	if($_POST["CREATE_SEMESTER_NAME"] === "" || ["CREATE_SEMESTER_PERIOD"] === "") {
+		$editError = "The name has to at least be 1 character.";
+		break;
+	}
+	
+	$stmt = $conn->prepare("INSERT INTO CLASS (SEMESTER, PERIOD) VALUES (:semester, :period)");
+	$stmt->execute(array('semester' => $_POST["CREATE_SEMESTER_NAME"],
+						 'period' => $_POST["CREATE_SEMESTER_PERIOD"]));
+						 
+	$editSuccess = 'Whoo, you created the period "' . $_POST["CREATE_SEMESTER_PERIOD"] . '" under the semester "' . $_POST["CREATE_SEMESTER_NAME"] . '" successfully!';
+}
+
+if(isset($_POST["DESTROY_SEMESTER"]) && $_POST["DESTROY_SEMESTER"] !== "NOTHING") {
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Destroy Semester</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	
+</head>
+<body>
+<div id="navbar">
+	<div id="exit" style="margin: 0;">
+		<a href="classes.php"><div class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">No, take me back!</div></div></a>
+	</div>
+</div>
+<div class="pseudobody">
+	<h1>Are you sure?</h1>
+	<div class="center" style="font-size: 22px; margin-bottom: 20px;">
+		<p>You are about to destroy the semester "<?php echo($_POST["DESTROY_SEMESTER"]);?>" FOREVER!</p>
+		<p>This will delete all the students and their data in this semester as well.</p><br>
+		<p>Are you REALLY sure you want to do this?</p>
+		<form method="post">
+			<input type="hidden" name="DESTROY_SEMESTER_REAL" value="<?php echo($_POST["DESTROY_SEMESTER"]);?>">
+			<h3>Password: </h3><div class="padding"><input type="password" id="password" name="password" autocomplete="off"></div><br>
+			<div class="padding"><button id="yes" name="submit" type="submit" value="submit">Yes, delete <?php echo($_POST["DESTROY_SEMESTER"]);?> forever (A long time!)</button></div>
+		</form>
+		<span id="hide" style="font-size:40px;">Wait 5 more seconds...</span>
+	</div>
+</div>
+<script>
+document.getElementById("yes").style.display = "none";
+var time = 5;
+function countDown() {
+	if(time > 1) {
+		document.getElementById("hide").innerHTML = "Wait "  + time + " more seconds...";
+		time = time - 1;
+		setTimeout(countDown,1000);
+	} else if(time == 1) {
+		document.getElementById("hide").innerHTML = "Wait 1 more second...";
+		time = time - 1;
+		setTimeout(countDown,1000);
+	} else {
+		document.getElementById("yes").style.display = "block"; 
+		document.getElementById("hide").style.display = "none";
+	}
+}
+countDown();
+</script>
+</body>
+<?php
+die();
+}
+
+}while(0);
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,53 +127,91 @@ include '/home/aj4057/connect_iron.php'; #Connect to db.
 <div class="pseudobody">
 	<h1>Create</h1>
 	<div class="center">
-		<form method="post">
-			<h3 class="titlepadding">Create new semester with the name...</h3>
-				<input class="text" 		
-					   type="text" 		
-					   name="createsemestername" 
-					   placeholder="ex: Spring 2016"><br>
-			
-			<h3 class="titlepadding">...OR select an existing semester from this drop-down list...</h3>
-				<select name='createsemesterselect' class="classestext">
-					 <option value='nothing' style="width: 100%;">Click to select an existing semester</option>
-				</select><br><br><br>
-			
-			<h3 class="titlepadding">...and then add the period to it...</h3>
-				<input class="text"
-					   type="text"
-					   name="createperiodname"
-					   placeholder="ex: Period 1"><br>
+		<div class="padding">
+			<form method="post">
+				<?php
+				if($error !== "") {echo("<span>$error</span>");}
+				if($editError !== "") {echo("<span>$editError</span>");}
+				if($editSuccess !== "") {echo("<p style=\"color:green;\">$editSuccess</p>");}
+				?>
+				<h3 class="titlepadding">Create new semester with the name...</h3>
+					<input class="text" 		
+						   type="text" 		
+						   name="CREATE_SEMESTER_NAME" 
+						   placeholder="ex: Spring 2016"><br>
+				
+				<h3 class="titlepadding">...OR select an existing semester from this drop-down list...</h3>
+					<select name='CREATE_SEMESTER_SELECT' class="classestext">
+						 <option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
+						 <?php foreach($semesterBuilder as $row) {echo($row);} ?>
+					</select><br><br><br>
+				
+				<h3 class="titlepadding">...and then add the period to it...</h3>
+					<input class="text"
+						   type="text"
+						   name="CREATE_SEMESTER_PERIOD"
+						   placeholder="ex: Period 1"><br>
 
-			<div class="padding"><input type="submit"	value="Create Period!" class="goodbutton"></div>
-		</form><br>
+				<div class="padding"><input type="submit"	value="Create Period!" class="goodbutton"></div>
+			</form><br>
+		</div>
 	</div>
 </div>
 
 <div class="pseudobody">
-	<h1>Destroy</h1>
+	<h1 id="destroy">Destroy</h1>
 	<div class="center">
-		<form method="post">
-			<h3 class="titlepadding">Destroy semester</h3>
-				<select name='destroysemester' class="classestext">
-					 <option value='nothing' style="width: 100%;">Select semester</option>
-				</select>
-			
-			<div class="padding"><input type="submit"	value="Delete semester forever!"></div>
-		</form>
-	</div>
+		<div class="padding">
+			<form method="post">
+				<h3 class="titlepadding">Destroy semester</h3>
+					<select name='DESTROY_SEMESTER' class="classestext">
+						 <option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
+						 <?php foreach($semesterBuilder as $row) {echo($row);} ?>
+					</select>
+				
+				<div class="padding"><button name="submit" type="submit" value="submit">Delete (Requires confirmation)</button></div>
+			</form>
+		</div>
+	</div><br><br><br>
+<?php
+if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"])) {
+	$stmt = $conn->prepare("SELECT PERIOD FROM CLASS WHERE SEMESTER = :semester");
+	$stmt->execute(array('semester' => $_POST["DESTROY_PERIOD_FROM_SEMESTER"]));
+	$all = $stmt->fetchAll();
+	foreach($all as $row) {
+		$periodBuilder[] = '<option value="' . $row['PERIOD'] . '" style="width: 100%;">' . $row['PERIOD'] . '</option>';
+	}
 	
-	<br><br><br>
+	$key = array_search('<option value="' .
+	$_POST['DESTROY_PERIOD_FROM_SEMESTER'] . '" style="width: 100%;">' .
+	$_POST['DESTROY_PERIOD_FROM_SEMESTER'] . '</option>', $semesterBuilder);
 	
+	if($key !== FALSE) {
+		$semesterBuilder[$key] = 
+		'<option selected="selected" value="' .
+		$_POST['DESTROY_PERIOD_FROM_SEMESTER'] . '" style="width: 100%;">' .
+		$_POST['DESTROY_PERIOD_FROM_SEMESTER'] . '</option>';
+	}
+}
+?>	
 	<div class="center">
-		<form method="post">
-			<h3 class="titlepadding">Destroy period from semester...</h3>
-				<select name='destroyperiodsemester' class="classestext">
-					 <option value='nothing' style="width: 100%;">Select semester</option>
-				</select>
-			
-			<div class="padding"><input type="submit"	value="Procede to next step..."></div>
-		</form><br>
+		<div class="padding">
+			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>#destroy">>
+				<h3 class="titlepadding">Destroy period from semester...</h3>
+					<select name='DESTROY_PERIOD_FROM_SEMESTER' class="classestext" onchange='if(this.value != 0) {this.form.submit();}'>
+						 <option value='NOTHING' style="width: 100%;">Select semester first...</option>
+						 <?php foreach($semesterBuilder as $row) {echo($row);} ?>
+					</select>
+					
+					<?php if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"])) {?>
+					<select name='DESTROY_PERIOD' class="classestext">
+						 <option value='NOTHING' style="width: 100%;">Select a period from <?php echo($_POST["DESTROY_PERIOD_FROM_SEMESTER"]);?></option>
+						 <?php foreach($periodBuilder as $row) {echo($row);} ?>
+					</select>
+					<div class="padding"><button name="DELETE" type="submit" value="USER">Delete (Requires confirmation)</button></div>
+					<?php } ?>
+			</form><br>
+		</div>
 	</div>
 </div>
 </body>
