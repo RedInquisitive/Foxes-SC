@@ -39,7 +39,8 @@ if((isset($_POST["CREATE_SEMESTER_NAME"]) || isset($_POST["CREATE_SEMESTER_SELEC
 	
 	
 	
-	if($_POST["CREATE_SEMESTER_NAME"] === "" || $_POST["CREATE_SEMESTER_PERIOD"] === "") {
+	if(trim($_POST["CREATE_SEMESTER_NAME"]) === "" || trim($_POST["CREATE_SEMESTER_PERIOD"]) === "" ||
+	   trim($_POST["CREATE_SEMESTER_NAME"]) === "NOTHING" || trim($_POST["CREATE_SEMESTER_PERIOD"]) === "NOTHING") {
 		$editError = "The name has to at least be 1 character.";
 		break;
 	}

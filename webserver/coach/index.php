@@ -24,7 +24,6 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 
 <div id="body">
 	<h1>Results for: (period, semester)</h1>
-	<?php include '/home/aj4057/require_select_iron.php';?>
 	<table>
 		<tr>
 			<th colspan="5">Dead Lift</th>
