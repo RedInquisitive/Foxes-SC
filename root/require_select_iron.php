@@ -1,5 +1,5 @@
 <?php
-session_start(); #Starting Session
+if (!isset ($_SESSION)) session_start();  #Starting Session
 if(isset($_POST["SEMESTER_GLOBAL"]) && $_POST["SEMESTER_GLOBAL"] !== "NOTHING") {
 	$_SESSION["SEMESTER_GLOBAL"] = $_POST["SEMESTER_GLOBAL"];
 }
@@ -95,7 +95,7 @@ if(isset($_SESSION["WEEK_GLOBAL"])) {
 <div id="dropdowns" style="margin: 0;">
 	<form method="post" style="float: left;">
 		<select name='SEMESTER_GLOBAL' onchange='if(this.value != 0) {this.form.submit();}'>
-			 <?php if(!isset($_SESSION["SEMESTER_GLOBAL"])) { ?>
+<?php if(!isset($_SESSION["SEMESTER_GLOBAL"])) { ?>
 			 <option value='NOTHING'>Select Semester</option>
 			 <?php } foreach($semesterBuilder as $row) {echo($row);} ?>
 		
@@ -103,7 +103,7 @@ if(isset($_SESSION["WEEK_GLOBAL"])) {
 	</form>
 	<form method="post" style="float: right;">
 		<select name='PERIOD_GLOBAL' onchange='if(this.value != 0) {this.form.submit();}'>
-			 <?php if(!isset($_SESSION["PERIOD_GLOBAL"])) { ?>
+<?php if(!isset($_SESSION["PERIOD_GLOBAL"])) { ?>
 			 <option value='NOTHING'>Select Period</option>
 			 <?php } foreach($periodBuilder as $row) {echo($row);} ?>
 		
@@ -121,6 +121,7 @@ if(isset($_SESSION["WEEK_GLOBAL"])) {
 <?php
 if(!isset($_SESSION["SEMESTER_GLOBAL"]) || !isset($_SESSION["PERIOD_GLOBAL"])) {
 ?>
+</div>
 <div id="body">
 	<h1>Wait!</h1>
 	<br>

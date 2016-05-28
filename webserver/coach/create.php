@@ -1,6 +1,27 @@
 <?php
+session_start();
 include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
+
+do {
+if(isset($_POST["BASE_BENCH"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POST["BASE_DEADLIFT"])) {
+	if(!is_numeric($_POST["BASE_BENCH"]) || !is_numeric($_POST["BASE_BACKSQUAT"]) || !is_numeric($_POST["BASE_DEADLIFT"])) {
+		$editError = "You somehow submitted text that should be a number. Try again with a number!";
+		break;
+	}
+	$stmt = $conn->prepare("INSERT INTO STUDENT$ (STUDENT_ID, NAME, PERIOD, SEMESTER, COACH, BASE_BENCH, BASE_BACKSQUAT, BASE_DEADLIFT) VALUES (:studentid, :name, :period, :semester, :coach, :bench, :backsquat, :deadlift)");
+	$stmt->execute(array('studentid' => $_POST["STUDENT_ID"],
+					 'name' => $_POST["NAME"],
+					 'period' => $_SESSION["PERIOD_GLOBAL"],
+					 'semester' => $_SESSION["SEMESTER_GLOBAL"],
+					 'coach' => $_SESSION['login_user'],
+					 'bench' => $_POST["BASE_BENCH"],
+					 'backsquat' => $_POST["BASE_BACKSQUAT"],
+					 'deadlift' => $_POST["BASE_DEADLIFT"]));
+					 
+	$editSuccess = 'You created the student "' . $_POST["NAME"] . '" in semester "' . $_SESSION["SEMESTER_GLOBAL"] . '" under the period "' . $_SESSION["PERIOD_GLOBAL"] . '" successfully!';
+}
+}while(0)
 ?>
 <!DOCTYPE html>
 <html>
@@ -22,13 +43,17 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 	<h1>Create</h1>
 	<div class="center">
 		<form method="post">
-			<p style="color:green">Student "Aaron Walter" created successfully.</p>
+			<?php
+			if($error !== "") {echo("<span>$error</span>");}
+			if($editError !== "") {echo("<span>$editError</span>");}
+			if($editSuccess !== "") {echo("<p style=\"color:green;\">$editSuccess</p>");}
+			?>
 			
 			<h3 class="titlepadding">Name</h3>
 				<input class="text" 		
 					   type="text" 		
 					   name="NAME" 
-					   placeholder="ex: Bob Joe"><br>
+					   placeholder="ex: Bob Joe" autofocus><br>
 			
 			<h3 class="titlepadding">Student ID</h3>
 				<input class="text"
