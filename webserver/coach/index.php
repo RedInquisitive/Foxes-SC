@@ -21,7 +21,11 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 	</div>
 	<?php include '/home/aj4057/require_select_iron.php';?>
 </div>
-
+<div class="center">
+	<div style="margin: 20px 0 20px; height: 50px;">
+		<a href="../logout.php"><div class="headlink"><div class="textheadlink">Log Out</div></div></a>
+	</div>
+</div>
 <div id="body">
 	<h1>Results for: (period, semester)</h1>
 	<table>

@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
 

@@ -1,5 +1,4 @@
 <?php
-session_start();
 $error = "";
 $editError = "";
 $editSuccess = "";
@@ -92,7 +91,7 @@ if(isset($_POST["DELETE"])) {
 				<th>Bench</th>
 				<th>Deadlift</th>
 				<th>Backsquat</th>
-				<th colspan="3">Actions</th>
+				<th>Actions</th>
 			</tr><tr>
 				<td colspan="6">
 					<a href="create.php"><div class="headlink" style="height: 52px;"><div class="textheadlink">Add Student</div></div></a>

@@ -10,9 +10,11 @@ if(strtotime(date("Y-m-d H:i:s")) - strtotime($_SESSION['timestamp']) > 60*60 ){
 	die();
 }
 
-if($_SESSION['valid'] !== "Coach") {
-	logout();
-	die();
+if($skip === null) {
+	if($_SESSION['valid'] !== "Coach") {
+		logout();
+		die();
+	}
 }
 
 function logout() {

@@ -1,6 +1,13 @@
 <?php
+$skip = true; 
 include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
+if($_SESSION['valid'] === "Coach" || $_SESSION['valid'] === "Laptop") {
+
+} else {
+	logout();
+	die();	
+}
 $_SESSION['valid'] = "Laptop"
 ?>
 <!DOCTYPE html>
@@ -58,7 +65,7 @@ $_SESSION['valid'] = "Laptop"
 </div>
 <div class="center">
 	<div style="margin: 80px 0 20px; height: 100px;">
-		<a href="../coach.php"><div class="headlink"><div class="textheadlink">Leave this page and return to the login screen.</div></div></a>
+		<a href="../logout.php"><div class="headlink"><div class="textheadlink">Leave this page and return to the login screen.</div></div></a>
 	</div>
 </div>
 </body>
