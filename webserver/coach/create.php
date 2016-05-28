@@ -15,16 +15,7 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 	<div id="exit" style="margin: 0;">
 		<a href="index.php"><div class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">Exit</div></div></a>
 	</div>
-	<form method="post" style="float: left;">
-		<select name='SEMESTER' onchange='if(this.value != 0) {this.form.submit();}'>
-			 <option value='Select'>Select Semester</option>
-		</select>
-	</form>
-	<form method="post" style="float: right;">
-		<select name='PERIOD' onchange='if(this.value != 0) {this.form.submit();}'>
-			 <option value='Select'>Select Period</option>
-		</select>
-	</form>
+	<?php include '/home/aj4057/require_select_iron.php';?>
 </div>
 
 <div class="pseudobody">
