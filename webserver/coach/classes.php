@@ -196,7 +196,7 @@ if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"])) {
 ?>	
 	<div class="center">
 		<div class="padding">
-			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>#destroy">>
+			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>#destroy">
 				<h3 class="titlepadding">Destroy period from semester...</h3>
 					<select name='DESTROY_PERIOD_FROM_SEMESTER' class="classestext" onchange='if(this.value != 0) {this.form.submit();}'>
 						 <option value='NOTHING' style="width: 100%;">Select semester first...</option>
