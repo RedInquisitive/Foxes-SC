@@ -1,5 +1,8 @@
 <?php
 $skip = true; 
+$error = "";
+$editError = "";
+$editSuccess = "";
 include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
 if($_SESSION['valid'] === "Coach" || $_SESSION['valid'] === "Laptop") {
@@ -31,12 +34,66 @@ if(isset($_SESSION["WEEK_GLOBAL"])) {
 		$_SESSION["WEEK_GLOBAL"] . '</option>';
 	}
 }
+if(isset($_POST["DEADLIFT"]) && isset($_POST["BENCH"]) && isset($_POST["SQUAT"]) && isset($_POST["STUDENT_ID"]) && isset($_POST["NAME"])) {
+	if(is_numeric($_POST["DEADLIFT"]) && is_numeric($_POST["BENCH"]) && is_numeric($_POST["SQUAT"])) {
+		$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period AND STUDENT_ID = :student_id");
+		$stmt->execute(array('coach' => $_SESSION['login_user'],
+							 'semester' => $_SESSION["SEMESTER_GLOBAL"],
+							 'period' => $_SESSION["PERIOD_GLOBAL"],
+							 'student_id' => $_POST["STUDENT_ID"]));
+		$row = $stmt->fetch();
+		if(isset($row["ID"])) {
+			$stmt = $conn->prepare("SELECT * FROM DATA WHERE WEEK = :week AND LINKED_ID = :link");
+			$stmt->execute(array('week' => $_SESSION["WEEK_GLOBAL"],
+								 'link' => $row["ID"]));
+			$replace = $stmt->fetch();
+			if(isset($replace["ID"])) {
+				$stmt = $conn->prepare("UPDATE DATA SET BENCH = :bench, DEADLIFT = :dead, BACKSQUAT = :back WHERE ID = :replace");
+				$stmt->execute(array('replace' => $replace["ID"],
+									 'bench' => $_POST["BENCH"],
+									 'dead' => $_POST["DEADLIFT"],
+									 'back' => $_POST["SQUAT"]));
+				$editSuccess = "Thanks for updating your information, " . $row["NAME"];
+			} else {
+				$stmt = $conn->prepare("INSERT INTO DATA (LINKED_ID, WEEK, BENCH, DEADLIFT, BACKSQUAT) VALUES (:link, :week, :bench, :dead, :back)");
+				$stmt->execute(array('link' => $row["ID"],
+									 'week' => $_SESSION["WEEK_GLOBAL"],
+									 'bench' => $_POST["BENCH"],
+									 'dead' => $_POST["DEADLIFT"],
+									 'back' => $_POST["SQUAT"]));
+				$editSuccess = "Thanks for entering your information, " . $row["NAME"];
+			}
+		} else {
+			$editError = "Either you don't exist or you entered your student ID incorrectly!";
+		}
+	} else {
+		$editError = "Enter a number next time, please!";
+	}
+} 
 
 $stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
 $stmt->execute(array('coach' => $_SESSION['login_user'],
 					 'semester' => $_SESSION["SEMESTER_GLOBAL"],
 					 'period' => $_SESSION["PERIOD_GLOBAL"]));
 $all = $stmt->fetchAll();
+
+$quarry = "SELECT * FROM DATA WHERE WEEK = :week AND (";
+$params = array();
+$params["week"] = $_SESSION["WEEK_GLOBAL"];
+$i = 0;
+foreach($all as $row) {
+	if ($row !== end($all)) {
+		$quarry = $quarry . "LINKED_ID = :p$i OR ";
+		$params["p$i"] = $row["ID"];
+	} else {
+		$quarry = $quarry . "LINKED_ID = :p$i);";
+		$params["p$i"] = $row["ID"];
+	}
+	$i++;
+}
+$stmt = $conn->prepare($quarry);
+$stmt->execute($params);
+$alreadyHasData = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,6 +117,13 @@ $all = $stmt->fetchAll();
 <body>
 <div id="body">
 	<h1><?php echo($_SESSION["SEMESTER_GLOBAL"] . ", " . $_SESSION["PERIOD_GLOBAL"] . "<br>Suggested week: " . $_SESSION["WEEK_GLOBAL"]); ?></h1>
+	<div class="center">
+		<?php
+		if($error !== "") {echo("<span>$error</span>");}
+		if($editError !== "") {echo("<span>$editError</span>");}
+		if($editSuccess !== "") {echo("<p style=\"color:green;\">$editSuccess</p>");}
+		?>
+	</div>
 	<div class="center" style="font-size: 22px; margin-bottom: 20px;">
 		<span>Leaving this page will require the Coach to login again!</span>
 	</div>
@@ -67,7 +131,7 @@ $all = $stmt->fetchAll();
 		<h3 class="titlepadding">If needed, you can change the week here.</h3>
 		<form method="post">
 			<select name='WEEK_LOCAL'  class="classestext" onchange='if(this.value != 0) {window.onbeforeunload = null; this.form.submit();}'>
-				<?php foreach($weekBuilder as $row) {echo($row);} ?>
+<?php foreach($weekBuilder as $row) {echo("\t\t\t\t" . $row . "\n");} ?>
 			</select>
 		</form>
 	</div>
@@ -78,11 +142,22 @@ $all = $stmt->fetchAll();
 				<th>Workout</th>
 			</tr><tr>
 				<td>
-					<?php
+<?php
 					foreach($all as $row) {
+						$echoed = FALSE;
+						foreach($alreadyHasData as $rowDone) {
+							if($rowDone["LINKED_ID"] === $row["ID"]) {
+								$echoed = TRUE; ?>
+					<label style="background-color: lime;"><input type="radio" name="NAME" value="<?php echo($row["ID"]); ?>"><?php echo($row["NAME"]); ?></label><br>
+<?php
+							}
+						}
+						if($echoed === FALSE) { ?>
+					<label><input type="radio" name="NAME" value="<?php echo($row["ID"]); ?>"><?php echo($row["NAME"]); ?></label><br>
+<?php
+						}
+					}
 					?>
-<label style="background-color: lime;"><input type="radio" name="name" value="<?php echo($row["ID"]); ?>"><?php echo($row["NAME"]); ?></label><br>
-					<?php } ?> 
 				</td>
 				<td>
 					<h3 class="titlepadding">Dead Lift</h3>
