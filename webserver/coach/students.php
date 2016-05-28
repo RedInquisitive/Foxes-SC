@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
 ?>
@@ -26,21 +27,37 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 			</style>
 			<tr>
 				<th>Name</th>
-				<th>Period</th>
 				<th>Student ID</th>
+				<th>Bench</th>
+				<th>Deadlift</th>
+				<th>Backsquat</th>
 				<th colspan="3">Actions</th>
 			</tr><tr>
-				<td colspan="6">
+				<td colspan="8">
 					<a href="create.php"><div class="headlink" style="height: 52px;"><div class="textheadlink">Add Student</div></div></a>
 				</td>
-			</tr><tr>
-				<td>Bob</td>
-				<td>Period 1</td>
-				<td>1111111</td>
-				<td><button name="edit" type="submit" value="1111111">Edit</button></td>
-				<td><button name="move" type="submit" value="1111111">Move</button></td>
-				<td><button name="delete" type="submit" value="1111111">Delete</button></td>
 			</tr>
+<?php
+$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
+$stmt->execute(array('coach' => $_SESSION['login_user'],
+					 'semester' => $_SESSION["SEMESTER_GLOBAL"],
+					 'period' => $_SESSION["PERIOD_GLOBAL"]));
+$all = $stmt->fetchAll();
+foreach($all as $row) {
+?>
+			<tr>
+				<td><?php echo($row["NAME"]); ?></td>
+				<td><?php echo($row["STUDENT_ID"]); ?></td>
+				<td><?php echo($row["BASE_BENCH"]); ?></td>
+				<td><?php echo($row["BASE_DEADLIFT"]); ?></td>
+				<td><?php echo($row["BASE_BACKSQUAT"]); ?></td>
+				<td><button name="edit" type="submit" value="<?php echo($row["ID"]); ?>">Edit</button></td>
+				<td><button name="move" type="submit" value="<?php echo($row["ID"]); ?>">Move</button></td>
+				<td><button name="delete" type="submit" value="<?php echo($row["ID"]); ?>">Delete</button></td>
+			</tr>
+<?php
+}
+?>
 		</table>
 	</form>
 </div>
