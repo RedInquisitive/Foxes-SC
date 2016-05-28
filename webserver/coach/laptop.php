@@ -1,4 +1,5 @@
 <?php
+$weekNeeded = TRUE;
 include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
 ?>
@@ -22,6 +23,7 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 	<div class="center" style="font-size: 22px; margin-bottom: 20px;">
 		<p>To prevent students from tampering with data, entering this mode will require you to enter your username and password if you want to edit students, links, or classes again.</p>
 		<p>Students from the period and semester that you select above will still be able to enter their information.</p>
+		<p>The week you select is simply a suggestion, students will be able to enter information from the weeks prior.</p> 
 		<div style="margin: 20px; height: 100px;">
 			<a href="laptopdata.php"><div class="headlink" style="background-color:#DD0000;	color:#fff;	border:2px solid #FF0000; padding:10px;	font-size:20px; cursor:pointer; border-radius:5px;"><div class="textheadlink">Use <?php echo($_SESSION["SEMESTER_GLOBAL"] . ', ' . $_SESSION["PERIOD_GLOBAL"]); ?></div></div></a>
 		</div>
