@@ -14,6 +14,9 @@ if(isset($_POST["DESTROY_STUDENT_REAL"])) {
 		$stmt = $conn->prepare("DELETE FROM STUDENT$ WHERE ID = :id AND COACH = :coach");
 		$stmt->execute(array('id' => $_POST["DESTROY_STUDENT_REAL"],
 							 'coach' => $_SESSION['login_user']));
+							 
+		$stmt = $conn->prepare("DELETE FROM DATA WHERE LINKED_ID = :id");
+		$stmt->execute(array('id' => $_POST["DESTROY_STUDENT_REAL"]));
 		$editSuccess = 'Student "' . $row["NAME"] . '" deleted forever.';
 	}
 }

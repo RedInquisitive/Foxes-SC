@@ -15,25 +15,19 @@ if($_SESSION['valid'] === "Coach" || $_SESSION['valid'] === "Laptop") {
 	die();	
 }
 $_SESSION['valid'] = "Laptop";
+$selectedWeek = $_SESSION["WEEK_GLOBAL"];
 
-$weekBuilder = array();
-for($week = 1; $week <= 16; $week++) {
-	$weekBuilder[] = 
-	'<option value="' . $week .
-	'" style="width: 100%;">Week ' . $week . '</option>';
+$usingTemp = "NO";
+if(isset($_POST["WEEK_LOCAL"]) && is_numeric($_POST["WEEK_LOCAL"]) && $_POST["WEEK_LOCAL"] > 0 && $_POST["WEEK_LOCAL"] <= 16 &&  $_POST["WEEK_LOCAL"] !== $_SESSION["WEEK_GLOBAL"]) {
+	$selectedWeek = (int)$_POST["WEEK_LOCAL"];
+	$usingTemp = "YES";
 }
-if(isset($_SESSION["WEEK_GLOBAL"])) {
-	$key = array_search('<option value="' .
-	$_SESSION["WEEK_GLOBAL"] . '" style="width: 100%;">Week ' .
-	$_SESSION["WEEK_GLOBAL"] . '</option>', $weekBuilder);
-	
-	if($key !== FALSE) {
-		$weekBuilder[$key] = 
-		'<option selected="selected" value="' .
-		$_SESSION["WEEK_GLOBAL"] . '" style="width: 100%;">Week ' .
-		$_SESSION["WEEK_GLOBAL"] . '</option>';
-	}
+
+if(isset($_POST["WEEK_LOCAL_PAGE"]) && is_numeric($_POST["WEEK_LOCAL_PAGE"]) && $_POST["WEEK_LOCAL_PAGE"] > 0 && $_POST["WEEK_LOCAL_PAGE"] <= 16 &&  $_POST["WEEK_LOCAL_PAGE"] !== $_SESSION["WEEK_GLOBAL"]) {
+	$selectedWeek = (int)$_POST["WEEK_LOCAL_PAGE"];
+	$usingTemp = "ULTRA_TEMP";
 }
+
 if(isset($_POST["DEADLIFT"]) && isset($_POST["BENCH"]) && isset($_POST["SQUAT"]) && isset($_POST["STUDENT_ID"]) && isset($_POST["NAME"])) {
 	if(is_numeric($_POST["DEADLIFT"]) && is_numeric($_POST["BENCH"]) && is_numeric($_POST["SQUAT"])) {
 		$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period AND STUDENT_ID = :student_id");
@@ -44,7 +38,7 @@ if(isset($_POST["DEADLIFT"]) && isset($_POST["BENCH"]) && isset($_POST["SQUAT"])
 		$row = $stmt->fetch();
 		if(isset($row["ID"])) {
 			$stmt = $conn->prepare("SELECT * FROM DATA WHERE WEEK = :week AND LINKED_ID = :link");
-			$stmt->execute(array('week' => $_SESSION["WEEK_GLOBAL"],
+			$stmt->execute(array('week' => $selectedWeek,
 								 'link' => $row["ID"]));
 			$replace = $stmt->fetch();
 			if(isset($replace["ID"])) {
@@ -57,7 +51,7 @@ if(isset($_POST["DEADLIFT"]) && isset($_POST["BENCH"]) && isset($_POST["SQUAT"])
 			} else {
 				$stmt = $conn->prepare("INSERT INTO DATA (LINKED_ID, WEEK, BENCH, DEADLIFT, BACKSQUAT) VALUES (:link, :week, :bench, :dead, :back)");
 				$stmt->execute(array('link' => $row["ID"],
-									 'week' => $_SESSION["WEEK_GLOBAL"],
+									 'week' => $selectedWeek,
 									 'bench' => $_POST["BENCH"],
 									 'dead' => $_POST["DEADLIFT"],
 									 'back' => $_POST["SQUAT"]));
@@ -69,7 +63,28 @@ if(isset($_POST["DEADLIFT"]) && isset($_POST["BENCH"]) && isset($_POST["SQUAT"])
 	} else {
 		$editError = "Enter a number next time, please!";
 	}
-} 
+}
+
+if($usingTemp === "ULTRA_TEMP") {
+	$selectedWeek = $_SESSION["WEEK_GLOBAL"];
+}
+
+$weekBuilder = array();
+for($week = 1; $week <= 16; $week++) {
+	$weekBuilder[] = 
+	'<option value="' . $week .
+	'" style="width: 100%;">Week ' . $week . '</option>';
+}
+$key = array_search('<option value="' .
+$selectedWeek . '" style="width: 100%;">Week ' .
+$selectedWeek . '</option>', $weekBuilder);
+
+if($key !== FALSE) {
+	$weekBuilder[$key] = 
+	'<option selected="selected" value="' .
+	$selectedWeek . '" style="width: 100%;">Week ' .
+	$selectedWeek . '</option>';
+}
 
 $stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
 $stmt->execute(array('coach' => $_SESSION['login_user'],
@@ -77,9 +92,36 @@ $stmt->execute(array('coach' => $_SESSION['login_user'],
 					 'period' => $_SESSION["PERIOD_GLOBAL"]));
 $all = $stmt->fetchAll();
 
+if($stmt->rowCount() == 0) {
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Aww...</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+<div id="body">
+	<h1>There's nobody here!</h1>
+	<div class="center" style="font-size: 22px; margin-bottom: 20px;">
+		<p>Sorry, but you never added anyone to this period. Please login and add some students first!</p> 
+	</div>
+	<div class="center">
+		<div style="margin: 20px; height: 100px;">
+			<a href="../logout.php"><div class="headlink"><div class="textheadlink">Leave this page and return to the login screen.</div></div></a>
+		</div>
+	</div>
+</div>
+</body>
+<?php
+die();
+}
+
 $quarry = "SELECT * FROM DATA WHERE WEEK = :week AND (";
 $params = array();
-$params["week"] = $_SESSION["WEEK_GLOBAL"];
+$params["week"] = $selectedWeek;
 $i = 0;
 foreach($all as $row) {
 	if ($row !== end($all)) {
@@ -116,7 +158,11 @@ $alreadyHasData = $stmt->fetchAll();
 </head>
 <body>
 <div id="body">
-	<h1><?php echo($_SESSION["SEMESTER_GLOBAL"] . ", " . $_SESSION["PERIOD_GLOBAL"] . "<br>Suggested week: " . $_SESSION["WEEK_GLOBAL"]); ?></h1>
+	<h1><?php
+echo($_SESSION["SEMESTER_GLOBAL"] . ", " . $_SESSION["PERIOD_GLOBAL"] . "<br>Suggested week: " . $_SESSION["WEEK_GLOBAL"]);
+if($usingTemp === "YES") {
+	echo("<br>Selected  week: " . $selectedWeek);			
+} ?></h1>
 	<div class="center">
 		<?php
 		if($error !== "") {echo("<span>$error</span>");}
@@ -148,12 +194,12 @@ $alreadyHasData = $stmt->fetchAll();
 						foreach($alreadyHasData as $rowDone) {
 							if($rowDone["LINKED_ID"] === $row["ID"]) {
 								$echoed = TRUE; ?>
-					<label style="background-color: lime;"><input type="radio" name="NAME" value="<?php echo($row["ID"]); ?>"><?php echo($row["NAME"]); ?></label><br>
+					<label style="background-color: lime; width: 200px; display: block; padding: 3px;"><input type="radio" name="NAME" value="<?php echo($row["ID"]); ?>"><?php echo($row["NAME"]); ?></label>
 <?php
 							}
 						}
 						if($echoed === FALSE) { ?>
-					<label><input type="radio" name="NAME" value="<?php echo($row["ID"]); ?>"><?php echo($row["NAME"]); ?></label><br>
+					<label style="width: 200px; display: block; padding: 3px;"><input type="radio" name="NAME" value="<?php echo($row["ID"]); ?>"><?php echo($row["NAME"]); ?></label>
 <?php
 						}
 					}
@@ -161,13 +207,17 @@ $alreadyHasData = $stmt->fetchAll();
 				</td>
 				<td>
 					<h3 class="titlepadding">Dead Lift</h3>
-					<input class="text" 		type="number" 		name="DEADLIFT" 	placeholder="Enter Reps Here"><br>
+					<input class="text" 		type="number" 		name="DEADLIFT" 		placeholder="Enter Reps Here"><br>
 					<h3 class="titlepadding">Bench</h3>
-					<input class="text" 		type="number" 		name="BENCH" 		placeholder="Enter Reps Here"><br>
+					<input class="text" 		type="number" 		name="BENCH" 			placeholder="Enter Reps Here"><br>
 					<h3 class="titlepadding">Squat</h3>
-					<input class="text" 		type="number" 		name="SQUAT" 		placeholder="Enter Reps Here"><br>
+					<input class="text" 		type="number" 		name="SQUAT" 			placeholder="Enter Reps Here"><br>
 					<h3 class="titlepadding">Student ID</h3>
-					<input class="text" 		type="password" 	name="STUDENT_ID" 	placeholder="Student ID" ><br>
+					<input class="text" 		type="password" 	name="STUDENT_ID" 		placeholder="Student ID" ><br>
+<?php
+if($usingTemp === "YES") {
+?>					<input class="text" 		type="hidden" 		name="WEEK_LOCAL_PAGE" 	value="<?php echo $selectedWeek; ?>"><br>
+<?php } ?>
 					<div class="padding"><input type="submit" value="Save!" onclick="window.onbeforeunload = null;"></div>
 				</td>
 			</tr>
