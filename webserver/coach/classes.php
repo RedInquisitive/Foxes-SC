@@ -129,11 +129,11 @@ die();
 	<div class="center">
 		<div class="padding">
 			<form method="post">
-				<?php
-				if($error !== "") {echo("<span>$error</span>");}
-				if($editError !== "") {echo("<span>$editError</span>");}
-				if($editSuccess !== "") {echo("<p style=\"color:green;\">$editSuccess</p>");}
-				?>
+<?php
+if($error !== "") {echo("<span>$error</span>");}
+if($editError !== "") {echo("<span>$editError</span>");}
+if($editSuccess !== "") {echo("<p style=\"color:green;\">$editSuccess</p>");}
+?>
 				<h3 class="titlepadding">Create new semester with the name...</h3>
 					<input class="text" 		
 						   type="text" 		
@@ -141,11 +141,15 @@ die();
 						   placeholder="ex: Spring 2016"><br>
 				
 				<h3 class="titlepadding">...OR select an existing semester from this drop-down list...</h3>
-					<select name='CREATE_SEMESTER_SELECT' class="classestext">
-						 <option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
-						 <?php foreach($semesterBuilder as $row) {echo($row);} ?>
-					</select><br><br><br>
-				
+
+<select name='CREATE_SEMESTER_SELECT' class="classestext">
+<option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
+<?php
+foreach($semesterBuilder as $row) {echo($row);}
+?> 
+</select>
+
+<br><br><br>			
 				<h3 class="titlepadding">...and then add the period to it...</h3>
 					<input class="text"
 						   type="text"
@@ -164,11 +168,14 @@ die();
 		<div class="padding">
 			<form method="post">
 				<h3 class="titlepadding">Destroy semester</h3>
-					<select name='DESTROY_SEMESTER' class="classestext">
-						 <option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
-						 <?php foreach($semesterBuilder as $row) {echo($row);} ?>
-					</select>
-				
+
+<select name='DESTROY_SEMESTER' class="classestext">
+<option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
+<?php
+foreach($semesterBuilder as $row) {echo($row);}
+?> 
+</select>
+
 				<div class="padding"><button name="submit" type="submit" value="submit">Delete (Requires confirmation)</button></div>
 			</form>
 		</div>
@@ -198,18 +205,29 @@ if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"])) {
 		<div class="padding">
 			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>#destroy">
 				<h3 class="titlepadding">Destroy period from semester...</h3>
-					<select name='DESTROY_PERIOD_FROM_SEMESTER' class="classestext" onchange='if(this.value != 0) {this.form.submit();}'>
-						 <option value='NOTHING' style="width: 100%;">Select semester first...</option>
-						 <?php foreach($semesterBuilder as $row) {echo($row);} ?>
-					</select>
-					
-					<?php if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"])) {?>
-					<select name='DESTROY_PERIOD' class="classestext">
-						 <option value='NOTHING' style="width: 100%;">Select a period from <?php echo($_POST["DESTROY_PERIOD_FROM_SEMESTER"]);?></option>
-						 <?php foreach($periodBuilder as $row) {echo($row);} ?>
-					</select>
-					<div class="padding"><button name="DELETE" type="submit" value="USER">Delete (Requires confirmation)</button></div>
-					<?php } ?>
+
+<select name='DESTROY_PERIOD_FROM_SEMESTER' class="classestext" onchange='if(this.value != 0) {this.form.submit();}'>
+<option value='NOTHING' style="width: 100%;">Select semester first...</option>
+<?php
+foreach($semesterBuilder as $row) {echo($row);}
+?>				
+</select>
+
+<?php
+if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"])) {
+?> 
+
+<select name='DESTROY_PERIOD' class="classestext">
+<option value='NOTHING' style="width: 100%;">Select a period from <?php echo($_POST["DESTROY_PERIOD_FROM_SEMESTER"]);?></option>
+<?php 
+foreach($periodBuilder as $row) {echo($row);} 
+?> 
+</select>
+
+				<div class="padding"><button name="DELETE" type="submit" value="USER">Delete (Requires confirmation)</button></div>
+<?php 
+}
+?>
 			</form><br>
 		</div>
 	</div>
