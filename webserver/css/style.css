@@ -101,6 +101,10 @@ h3 {
 	background-color: #4F81BD;
 	padding: 5px;
 }
+.headlink:hover {
+	border: 2px solid #496E9B;
+	background-color: #5F92CE;
+}
 .textheadlink {
 	position: relative;
     top: 30%;
@@ -182,7 +186,7 @@ table {
 }
 table, th, td {
     border: 2px solid black;
-	padding: 5px 10px;
+	padding: 3px 10px;
 	min-width: 50px;
 }
 table tr:nth-child(even) {
