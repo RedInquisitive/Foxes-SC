@@ -2,6 +2,8 @@
 $error = "";
 $editError = "";
 $editSuccess = "";
+$editErrorWeekly = "";
+$editSuccessWeekly = "";
 include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
 if(isset($_POST["EDIT"])) {
@@ -18,6 +20,37 @@ if(isset($_POST["EDIT"])) {
 	die();
 }
 do{
+if(isset($_POST["WEEK_LOCAL"]) && isset($_POST["BENCH"]) && isset($_POST["DEADLIFT"]) && isset($_POST["BACKSQUAT"]) && isset($_POST["UPDATE_WEEK"])) {
+	if(!is_numeric($_POST["BENCH"]) || !is_numeric($_POST["DEADLIFT"]) || !is_numeric($_POST["BACKSQUAT"]) || !is_numeric($_POST["WEEK_LOCAL"])) {
+		$editErrorWeekly = "You somehow submitted text that should be a number. Try again with a number!";
+		break;
+	}
+	if($_POST["WEEK_LOCAL"] > 12 || $_POST["WEEK_LOCAL"] < 1) {
+		$editErrorWeekly = "The week should be a number 1-12";
+		break;
+	}
+	$stmt = $conn->prepare("SELECT * FROM DATA WHERE WEEK = :week AND LINKED_ID = :link");
+	$stmt->execute(array('week' => $_POST["WEEK_LOCAL"],
+						 'link' => $row["ID"]));
+	$replace = $stmt->fetch();
+	if(isset($replace["ID"])) {
+		$stmt = $conn->prepare("UPDATE DATA SET BENCH = :bench, DEADLIFT = :dead, BACKSQUAT = :back WHERE ID = :replace");
+		$stmt->execute(array('replace' => $replace["ID"],
+							 'bench' => $_POST["BENCH"],
+							 'dead' => $_POST["DEADLIFT"],
+							 'back' => $_POST["BACKSQUAT"]));
+		$editSuccessWeekly = "You manually updated " . $row["NAME"] . "'s information for week " . $_POST["WEEK_LOCAL"];
+	} else {
+		$stmt = $conn->prepare("INSERT INTO DATA (LINKED_ID, WEEK, BENCH, DEADLIFT, BACKSQUAT) VALUES (:link, :week, :bench, :dead, :back)");
+		$stmt->execute(array('link' => $row["ID"],
+							 'week' => $_POST["WEEK_LOCAL"],
+							 'bench' => $_POST["BENCH"],
+							 'dead' => $_POST["DEADLIFT"],
+							 'back' => $_POST["BACKSQUAT"]));
+		$editSuccessWeekly = "You manually entered " . $row["NAME"] . "'s information for week " . $_POST["WEEK_LOCAL"];
+	}
+}
+	
 if(isset($_POST["NAME"]) && isset($_POST["STUDENT_ID"]) && isset($_POST["GENDER"]) &&
    isset($_POST["BASE_DEADLIFT"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POST["BASE_BENCH"]) &&
    isset($_POST["POST_DEADLIFT"]) && isset($_POST["POST_BACKSQUAT"]) && isset($_POST["POST_BENCH"])) {
@@ -128,7 +161,13 @@ if(isset($_POST["WEEK_LOCAL"])) {
 			<input type="hidden"
 				   name="EDIT"
 				   value="<?php echo($_POST["EDIT"]); ?>"><br>
-				
+
+			<?php
+			if($error !== "") {echo("<span>$error</span>");}
+			if($editErrorWeekly !== "") {echo("<span>$editErrorWeekly</span>");}
+			if($editSuccessWeekly !== "") {echo("<p style=\"color:green;\">$editSuccessWeekly</p>");}
+			?> 
+
 			<h3 class="titlepadding">WARNING: Switching this field will clear any unsaved data below!</h3>
 				<select class="classestext" name='WEEK_LOCAL' onchange='if(this.value != 0) {this.form.submit();}'>
 <?php foreach($weekBuilder as $weeks) {echo($weeks);} ?> 
@@ -142,21 +181,21 @@ $replace = $stmt->fetch();
 ?>
 			<h3 class="titlepadding">Bench Press</h3>
 				<input class="text"
-					   type="text"
+					   type="number"
 					   name="BENCH"
 					   placeholder="<?php echo($replace["BENCH"]); ?>" 
 					   value="<?php echo($replace["BENCH"]); ?>"><br>
 					   
 			<h3 class="titlepadding">Dead Lift</h3>
 				<input class="text"
-					   type="text"
+					   type="number"
 					   name="DEADLIFT"
 					   placeholder="<?php echo($replace["DEADLIFT"]); ?>" 
 					   value="<?php echo($replace["DEADLIFT"]); ?>"><br>
 					   
 			<h3 class="titlepadding">Backsquat</h3>
 				<input class="text"
-					   type="text"
+					   type="number"
 					   name="BACKSQUAT"
 					   placeholder="<?php echo($replace["BACKSQUAT"]); ?>" 
 					   value="<?php echo($replace["BACKSQUAT"]); ?>"><br>
@@ -173,7 +212,6 @@ $replace = $stmt->fetch();
 				   name="EDIT"
 				   value="<?php echo($_POST["EDIT"]); ?>">
 			<?php
-			if($error !== "") {echo("<span>$error</span>");}
 			if($editError !== "") {echo("<span>$editError</span>");}
 			if($editSuccess !== "") {echo("<p style=\"color:green;\">$editSuccess</p>");}
 			?> 
