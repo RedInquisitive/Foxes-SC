@@ -34,7 +34,7 @@ if(isset($_POST["NAME"]) && isset($_POST["STUDENT_ID"]) && isset($_POST["GENDER"
 		$editError = "You somehow submitted text that should be a number. Try again with a number!";
 		break;
 	}
-	if(trim($_POST["NAME"]) == "" || trim($_POST["STUDENT_ID"]) == "" || trim(trim($_POST["GENDER"] == "")) {
+	if(trim($_POST["NAME"]) == "" || trim($_POST["STUDENT_ID"]) == "" || trim($_POST["GENDER"] == "")) {
 		$editError = "Please enter data in all of the fields!";
 		break;
 	}

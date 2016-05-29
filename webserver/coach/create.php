@@ -8,7 +8,7 @@ if(isset($_POST["BASE_BENCH"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POS
 		$editError = "You somehow submitted text that should be a number. Try again with a number!";
 		break;
 	}
-	if($_POST["NAME"] == "" || $_POST["STUDENT_ID"] == "" || $_POST["GENDER"] == "") {
+	if(trim($_POST["NAME"]) == "" || trim($_POST["STUDENT_ID"]) == "" || trim($_POST["GENDER"]) == "") {
 		$editError = "Some fields were left empty!";
 		break;
 	}
