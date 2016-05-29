@@ -18,12 +18,12 @@ $_SESSION['valid'] = "Laptop";
 $selectedWeek = $_SESSION["WEEK_GLOBAL"];
 
 $usingTemp = "NO";
-if(isset($_POST["WEEK_LOCAL"]) && is_numeric($_POST["WEEK_LOCAL"]) && $_POST["WEEK_LOCAL"] > 0 && $_POST["WEEK_LOCAL"] <= 16 &&  $_POST["WEEK_LOCAL"] !== $_SESSION["WEEK_GLOBAL"]) {
+if(isset($_POST["WEEK_LOCAL"]) && is_numeric($_POST["WEEK_LOCAL"]) && $_POST["WEEK_LOCAL"] > 0 && $_POST["WEEK_LOCAL"] <= 12 &&  $_POST["WEEK_LOCAL"] !== $_SESSION["WEEK_GLOBAL"]) {
 	$selectedWeek = (int)$_POST["WEEK_LOCAL"];
 	$usingTemp = "YES";
 }
 
-if(isset($_POST["WEEK_LOCAL_PAGE"]) && is_numeric($_POST["WEEK_LOCAL_PAGE"]) && $_POST["WEEK_LOCAL_PAGE"] > 0 && $_POST["WEEK_LOCAL_PAGE"] <= 16 &&  $_POST["WEEK_LOCAL_PAGE"] !== $_SESSION["WEEK_GLOBAL"]) {
+if(isset($_POST["WEEK_LOCAL_PAGE"]) && is_numeric($_POST["WEEK_LOCAL_PAGE"]) && $_POST["WEEK_LOCAL_PAGE"] > 0 && $_POST["WEEK_LOCAL_PAGE"] <= 12 &&  $_POST["WEEK_LOCAL_PAGE"] !== $_SESSION["WEEK_GLOBAL"]) {
 	$selectedWeek = (int)$_POST["WEEK_LOCAL_PAGE"];
 	$usingTemp = "ULTRA_TEMP";
 }
@@ -70,7 +70,7 @@ if($usingTemp === "ULTRA_TEMP") {
 }
 
 $weekBuilder = array();
-for($week = 1; $week <= 16; $week++) {
+for($week = 1; $week <= 12; $week++) {
 	$weekBuilder[] = 
 	'<option value="' . $week .
 	'" style="width: 100%;">Week ' . $week . '</option>';

@@ -32,7 +32,7 @@ foreach($all as $row) {
 	'" style="width: 100%;">' . $row["SEMESTER"] . '</option>';
 }
 
-for($week = 1; $week <= 16; $week++) {
+for($week = 1; $week <= 12; $week++) {
 	$weekBuilder[] = 
 	'<option value="' . $week .
 	'" style="width: 100%;">Week ' . $week . '</option>';
@@ -129,7 +129,7 @@ if(!isset($_SESSION["SEMESTER_GLOBAL"]) || !isset($_SESSION["PERIOD_GLOBAL"]) ||
 	<?php
 	if(!isset($_SESSION["WEEK_GLOBAL"]) && $weekNeeded === TRUE) {
 	?>
-	<span>You must select a semester, a period, and a week from the top of this page in order to view its contents. If you have no periods or semesters yet, try creating some in the 'Modify Classes' tab. You can select any week 1-16.</span>
+	<span>You must select a semester, a period, and a week from the top of this page in order to view its contents. If you have no periods or semesters yet, try creating some in the 'Modify Classes' tab. You can select any week 1-12.</span>
 	<?php
 	} else {
 	?>

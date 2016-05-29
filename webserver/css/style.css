@@ -186,7 +186,7 @@ table, th, td {
 	min-width: 50px;
 }
 table tr:nth-child(even) {
-    background-color: #eee;
+    background-color: #ddd;
 }
 table tr:nth-child(odd) {
    background-color:#fff;
