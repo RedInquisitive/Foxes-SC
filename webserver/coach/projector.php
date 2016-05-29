@@ -59,6 +59,17 @@ $stmt->execute(array('coach' => $_SESSION['login_user'],
 					 'period' => $_SESSION["PERIOD_GLOBAL"]));
 $all = $stmt->fetchAll();
 
+if($stmt->rowCount() == 0) {
+?>
+	<tr>
+		<td colspan="13" style="text-align: center;">There is nobody here!</td>
+	</tr>
+</table>
+</body>
+<?php	
+	die();
+}
+
 $quarry = "SELECT * FROM DATA WHERE (WEEK = :week";
 $params = array();
 $params["week"] = $_SESSION["WEEK_GLOBAL"];
