@@ -1,4 +1,7 @@
 <?php
+$error = "";
+$editError = "";
+$editSuccess = "";
 include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
 if(isset($_POST["EDIT"])) {
@@ -14,6 +17,50 @@ if(isset($_POST["EDIT"])) {
 	header("Location: students.php");
 	die();
 }
+do{
+if(isset($_POST["NAME"]) && isset($_POST["STUDENT_ID"]) && isset($_POST["GENDER"]) &&
+   isset($_POST["BASE_DEADLIFT"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POST["BASE_BENCH"]) &&
+   isset($_POST["POST_DEADLIFT"]) && isset($_POST["POST_BACKSQUAT"]) && isset($_POST["POST_BENCH"])) {
+	$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE STUDENT_ID = :id AND COACH = :coach");
+	$stmt->execute(array('id' => $_POST["STUDENT_ID"],
+						 'coach' => $_SESSION['login_user']));
+	$exists = $stmt->fetch();
+	if(isset($exists["NAME"]) && $exists["ID"] != $row["ID"]) {
+		$editError = $exists["NAME"] . " already uses the Student ID " . $exists["STUDENT_ID"] . "!";
+		break;
+	}
+	if(!is_numeric($_POST["BASE_BENCH"]) || !is_numeric($_POST["BASE_BACKSQUAT"]) || !is_numeric($_POST["BASE_DEADLIFT"]) ||
+	   !is_numeric($_POST["POST_BENCH"]) || !is_numeric($_POST["POST_BACKSQUAT"]) || !is_numeric($_POST["POST_DEADLIFT"])) {
+		$editError = "You somehow submitted text that should be a number. Try again with a number!";
+		break;
+	}
+	if(trim($_POST["NAME"]) == "" || trim($_POST["STUDENT_ID"]) == "" || trim(trim($_POST["GENDER"] == "")) {
+		$editError = "Please enter data in all of the fields!";
+		break;
+	}
+	$stmt = $conn->prepare("UPDATE STUDENT$ SET BASE_BENCH = :basebench, BASE_DEADLIFT = :basedead, BASE_BACKSQUAT = :baseback, " . 
+	                                           "POST_BENCH = :postbench, POST_DEADLIFT = :postdead, POST_BACKSQUAT = :postback, " . 
+	                                           "NAME = :name, STUDENT_ID = :studid, GENDER = :gender WHERE ID = :replace");
+	$stmt->execute(array('replace' => $row["ID"],
+						 'basebench' => $_POST["BASE_BENCH"],
+						 'basedead' => $_POST["BASE_DEADLIFT"],
+						 'baseback' => $_POST["BASE_BACKSQUAT"],
+						 'postbench' => $_POST["POST_BENCH"],
+						 'postdead' => $_POST["POST_DEADLIFT"],
+						 'postback' => $_POST["POST_BACKSQUAT"],
+						 'name' => $_POST["NAME"],
+						 'studid' => $_POST["STUDENT_ID"],
+						 'gender' => $_POST["GENDER"]));
+	$editSuccess = "Hurray, you updated the information successfully!";
+	
+	#refetch information because we just updated it.
+	$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE ID = :id AND COACH = :coach");
+	$stmt->execute(array('id' => $_POST["EDIT"],
+						 'coach' => $_SESSION['login_user']));
+	$row = $stmt->fetch();
+}
+} while(0);
+
 $weekBuilder = array();
 $stmt = $conn->prepare("SELECT * FROM DATA WHERE LINKED_ID = :link");
 $stmt->execute(array('link' => $row["ID"]));
@@ -75,14 +122,13 @@ if(isset($_POST["WEEK_LOCAL"])) {
 	</div>
 </div>
 <div class="pseudobody">
-	<h1>Editing: <?php echo($row["NAME"]); ?></h1>
+	<h1>Weekly data for <?php echo($row["NAME"]); ?></h1>
 	<div class="center">
 		<form method="post">
 			<input type="hidden"
 				   name="EDIT"
 				   value="<?php echo($_POST["EDIT"]); ?>"><br>
 				
-			<h3 class="titlepadding">Edit individual data entries</h3>
 			<h3 class="titlepadding">WARNING: Switching this field will clear any unsaved data below!</h3>
 				<select class="classestext" name='WEEK_LOCAL' onchange='if(this.value != 0) {this.form.submit();}'>
 <?php foreach($weekBuilder as $weeks) {echo($weeks);} ?> 
@@ -120,7 +166,7 @@ $replace = $stmt->fetch();
 	</div>
 </div>
 <div class="pseudobody">
-	<h1>Editing: <?php echo($row["NAME"]); ?></h1>
+	<h1>General data for <?php echo($row["NAME"]); ?></h1>
 	<div class="center">
 		<form method="post">
 			<input type="hidden"
@@ -162,14 +208,14 @@ if($row["GENDER"] == "F") {
 ?>
 			</select>
 					   
-			<h3 class="titlepadding">Original Dead Lift MAX</h3>
+			<h3 class="titlepadding">Original Bench MAX</h3>
 				<input class="text"
 					   type="number"
 					   name="BASE_BENCH"
 					   placeholder="<?php echo($row["BASE_BENCH"]); ?>" 
 					   value="<?php echo($row["BASE_BENCH"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Original Bench MAX</h3>
+			<h3 class="titlepadding">Original Deadlift MAX</h3>
 				<input class="text"
 					   type="number"
 					   name="BASE_DEADLIFT"
@@ -180,17 +226,17 @@ if($row["GENDER"] == "F") {
 				<input class="text"
 					   type="number"
 					   name="BASE_BACKSQUAT"
-					   placeholder="<?php echo($row["BASE_DEADLIFT"]); ?>" 
-					   value="<?php echo($row["BASE_DEADLIFT"]); ?>"><br>
+					   placeholder="<?php echo($row["BASE_BACKSQUAT"]); ?>" 
+					   value="<?php echo($row["BASE_BACKSQUAT"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Post Test Dead Lift MAX (Set to 0 for Not Entered)</h3>
+			<h3 class="titlepadding">Post Test Bench MAX (Set to 0 for Not Entered)</h3>
 				<input class="text"
 					   type="number"
-					   name="BASE_BENCH"
+					   name="POST_BENCH"
 					   placeholder="<?php echo($row["POST_BENCH"]); ?>" 
 					   value="<?php echo($row["POST_BENCH"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Post Test Bench MAX (Set to 0 for Not Entered)</h3>
+			<h3 class="titlepadding">Post Test Deadlift MAX (Set to 0 for Not Entered)</h3>
 				<input class="text"
 					   type="number"
 					   name="POST_DEADLIFT"
@@ -201,8 +247,8 @@ if($row["GENDER"] == "F") {
 				<input class="text"
 					   type="number"
 					   name="POST_BACKSQUAT"
-					   placeholder="<?php echo($row["POST_DEADLIFT"]); ?>" 
-					   value="<?php echo($row["POST_DEADLIFT"]); ?>"><br>
+					   placeholder="<?php echo($row["POST_BACKSQUAT"]); ?>" 
+					   value="<?php echo($row["POST_BACKSQUAT"]); ?>"><br>
 
 			<div class="padding"><input type="submit"	value="Edit Student!" class="goodbutton"></div>
 		</form><br>
