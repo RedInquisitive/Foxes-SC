@@ -15,10 +15,26 @@ if(isset($_POST["EDIT"])) {
 	die();
 }
 $weekBuilder = array();
+$stmt = $conn->prepare("SELECT * FROM DATA WHERE LINKED_ID = :link");
+$stmt->execute(array('link' => $row["ID"]));
+$weekData = $stmt->fetchAll();
+
 for($week = 1; $week <= 12; $week++) {
-	$weekBuilder[] = 
-	'<option value="' . $week .
-	'" style="width: 100%;">Week ' . $week . '</option>';
+	$echoed = FALSE;
+	foreach($weekData as $weekDataRow) {
+		if($weekDataRow["WEEK"] == $week) {
+			$echoed = TRUE;
+			$weekBuilder[] = 
+			'<option value="' . $week .
+			'" style="width: 100%; background-color: lime;">* Week ' . $week . '</option>';
+			break;
+		}
+	}
+	if($echoed == FALSE) {
+		$weekBuilder[] = 
+		'<option value="' . $week .
+		'" style="width: 100%;">Week ' . $week . '</option>';
+	}
 }
 $selectedWeek = 1;
 if(isset($_POST["WEEK_LOCAL"])) {
@@ -26,12 +42,21 @@ if(isset($_POST["WEEK_LOCAL"])) {
 	$key = array_search('<option value="' .
 	$selectedWeek  . '" style="width: 100%;">Week ' .
 	$selectedWeek  . '</option>', $weekBuilder);
-	
 	if($key !== FALSE) {
 		$weekBuilder[$key] = 
 		'<option selected="selected" value="' .
 		$selectedWeek  . '" style="width: 100%;">Week ' .
 		$selectedWeek  . '</option>';
+	} else {
+		$key = array_search('<option value="' .
+		$selectedWeek  . '" style="width: 100%; background-color: lime;">* Week ' .
+		$selectedWeek  . '</option>', $weekBuilder);
+		if($key !== FALSE) {
+			$weekBuilder[$key] = 
+			'<option selected="selected" value="' .
+			$selectedWeek  . '" style="width: 100%; background-color: lime;">* Week ' .
+			$selectedWeek  . '</option>';
+		}
 	}
 }
 ?>
