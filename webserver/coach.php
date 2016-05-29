@@ -41,12 +41,12 @@ if(isset($_SESSION['login_user']) && $_SESSION['valid'] === "Coach"){
 ?>
 <!DOCTYPE html>
 <html>
-<header>
+<head>
 	<title>Coach Login</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-</header>
+</head>
 <body>
 	<div id="main">
 		<div id="login">
