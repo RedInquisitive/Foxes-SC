@@ -118,8 +118,11 @@ foreach($all as $row) {
 					if($dataRow["BACKSQUAT"] > 7) {
 						$repsLargerThanAdderForBacksquat += 10;
 					}
+					break;
 				}
 			}
+		} else {
+			break;
 		}
 	}
 	$echoed = FALSE;
@@ -163,6 +166,7 @@ foreach($all as $row) {
 	</tr>
 <?php
 			}
+			break;
 		}
 	}
 	if($echoed == FALSE) {
