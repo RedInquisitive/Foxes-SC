@@ -91,12 +91,14 @@ if(isset($_POST["DELETE"])) {
 			<tr>
 				<th>Name</th>
 				<th>Student ID</th>
+				<th>Gender</th>
+				<th></th>
 				<th>Bench</th>
 				<th>Deadlift</th>
 				<th>Backsquat</th>
-				<th>Actions</th>
+				<th colspan="2">Actions</th>
 			</tr><tr>
-				<td colspan="6">
+				<td colspan="9">
 					<a href="create.php"><div class="headlink" style="height: 52px;"><div class="textheadlink">Add Student</div></div></a>
 				</td>
 			</tr>
@@ -109,12 +111,22 @@ $all = $stmt->fetchAll();
 foreach($all as $row) {
 ?>
 			<tr>
-				<td><?php echo($row["NAME"]); ?></td>
-				<td><?php echo($row["STUDENT_ID"]); ?></td>
+				<td rowspan="2"><?php echo($row["NAME"]); ?></td>
+				<td rowspan="2"><?php echo($row["STUDENT_ID"]); ?></td>
+				<td rowspan="2"><?php echo($row["GENDER"] == "F" ? "Female" : "Male"); ?></td>
+				<td style="background-color: black; color:white; border: 2px solid grey;">Pre:</td>
 				<td><?php echo($row["BASE_BENCH"]); ?></td>
 				<td><?php echo($row["BASE_DEADLIFT"]); ?></td>
 				<td><?php echo($row["BASE_BACKSQUAT"]); ?></td>
-				<td><button name="DELETE" type="submit" value="<?php echo($row["ID"]); ?>">Delete</button></td>
+				<td rowspan="2"><button name="EDIT" type="submit" value="<?php echo($row["ID"]); ?>">Edit</button></td>
+				<td rowspan="2"><button name="DELETE" type="submit" value="<?php echo($row["ID"]); ?>">Delete</button></td>
+				
+			</tr>
+			<tr>
+				<td style="background-color: black; color:white; border: 2px solid grey;">Post:</td>
+				<td><?php echo($row["POST_BENCH"] == 0 ? "Not Entered" : $row["POST_BENCH"]); ?></td>
+				<td><?php echo($row["POST_DEADLIFT"] == 0 ? "Not Entered" : $row["POST_DEADLIFT"]); ?></td>
+				<td><?php echo($row["POST_BACKSQUAT"] == 0 ? "Not Entered" : $row["POST_BACKSQUAT"]); ?></td>
 			</tr>
 <?php
 }

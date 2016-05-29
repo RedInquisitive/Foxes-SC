@@ -3,11 +3,25 @@ include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
 
 do {
-if(isset($_POST["BASE_BENCH"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POST["BASE_DEADLIFT"])) {
+if(isset($_POST["BASE_BENCH"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POST["BASE_DEADLIFT"]) && isset($_POST["NAME"]) && isset($_POST["STUDENT_ID"]) && isset($_POST["GENDER"])) {
 	if(!is_numeric($_POST["BASE_BENCH"]) || !is_numeric($_POST["BASE_BACKSQUAT"]) || !is_numeric($_POST["BASE_DEADLIFT"])) {
 		$editError = "You somehow submitted text that should be a number. Try again with a number!";
 		break;
 	}
+	if($_POST["NAME"] == "" || $_POST["STUDENT_ID"] == "" || $_POST["GENDER"] == "") {
+		$editError = "Some fields were left empty!";
+		break;
+	}
+	
+	$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE STUDENT_ID = :id AND COACH = :coach");
+	$stmt->execute(array('id' => $_POST["STUDENT_ID"],
+						 'coach' => $_SESSION['login_user']));
+	$row = $stmt->fetch();
+	if(isset($row["NAME"])) {
+		$editError = $row["NAME"] . " already uses the Student ID " . $row["STUDENT_ID"] . "!";
+		break;
+	}
+	
 	$stmt = $conn->prepare("INSERT INTO STUDENT$ (STUDENT_ID, NAME, PERIOD, SEMESTER, COACH, BASE_BENCH, BASE_BACKSQUAT, BASE_DEADLIFT) VALUES (:studentid, :name, :period, :semester, :coach, :bench, :backsquat, :deadlift)");
 	$stmt->execute(array('studentid' => $_POST["STUDENT_ID"],
 					 'name' => $_POST["NAME"],
@@ -59,6 +73,12 @@ if(isset($_POST["BASE_BENCH"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POS
 					   type="text"
 					   name="STUDENT_ID"
 					   placeholder="ex: 1714057"><br>
+					   
+			<h3 class="titlepadding">Gender</h3>
+			<select name='GENDER' class="classestext">
+				<option value='M' style="width: 100%;">Male</option>
+				<option value='F' style="width: 100%;">Female</option>
+			</select>
 					   
 			<h3 class="titlepadding">Original Dead Lift MAX</h3>
 				<input class="text"
