@@ -44,80 +44,140 @@ if((int)$_SESSION["WEEK_GLOBAL"] % 3 == "0") {
 		<th>Reps</th>
 		<th colspan="2">3x<?php echo($reps); ?></th>
 		<th>MAX</th>
-		<th>#</th>
+		<th>AMRAP</th>
 		<th colspan="2">3x<?php echo($reps); ?></th>
 		<th>MAX</th>
-		<th>#</th>
+		<th>AMRAP</th>
 		<th colspan="2">3x<?php echo($reps); ?></th>
 		<th>MAX</th>
-		<th>#</th>
+		<th>AMRAP</th>
 	</tr>
 <?php
-if($_SESSION["WEEK_GLOBAL"] < 4) {
-	$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
-	$stmt->execute(array('coach' => $_SESSION['login_user'],
-						 'semester' => $_SESSION["SEMESTER_GLOBAL"],
-						 'period' => $_SESSION["PERIOD_GLOBAL"]));
-	$all = $stmt->fetchAll();
-	
-	$quarry = "SELECT * FROM DATA WHERE WEEK = :week AND (";
-	$params = array();
-	$params["week"] = $_SESSION["WEEK_GLOBAL"];
-	$i = 0;
-	foreach($all as $row) {
-		if ($row !== end($all)) {
-			$quarry = $quarry . "LINKED_ID = :p$i OR ";
-			$params["p$i"] = $row["ID"];
-		} else {
-			$quarry = $quarry . "LINKED_ID = :p$i);";
-			$params["p$i"] = $row["ID"];
-		}
-		$i++;
+$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
+$stmt->execute(array('coach' => $_SESSION['login_user'],
+					 'semester' => $_SESSION["SEMESTER_GLOBAL"],
+					 'period' => $_SESSION["PERIOD_GLOBAL"]));
+$all = $stmt->fetchAll();
+
+$quarry = "SELECT * FROM DATA WHERE (WEEK = :week";
+$params = array();
+$params["week"] = $_SESSION["WEEK_GLOBAL"];
+for($i = 1; $i <= 3; $i++) {
+	if($_SESSION["WEEK_GLOBAL"] > $i * 3) {
+		$quarry = $quarry . " OR WEEK = :week$i";
+		$params["week$i"] = ($i * 3) . "";
 	}
-	$stmt = $conn->prepare($quarry);
-	$stmt->execute($params);
-	$alreadyHasData = $stmt->fetchAll();
+}
+
+$i = 0;
+$quarry = $quarry . ") AND (";
+foreach($all as $row) {
+	if ($row !== end($all)) {
+		$quarry = $quarry . "LINKED_ID = :p$i OR ";
+		$params["p$i"] = $row["ID"];
+	} else {
+		$quarry = $quarry . "LINKED_ID = :p$i);";
+		$params["p$i"] = $row["ID"];
+	}
+	$i++;
+}
+$stmt = $conn->prepare($quarry);
+$stmt->execute($params);
+$alreadyHasData = $stmt->fetchAll();
+
+foreach($all as $row) {
+	$repsLargerThanAdderForDeadlift = 0;
+	$repsLargerThanAdderForBench = 0;
+	$repsLargerThanAdderForBacksquat = 0;
 	
-	foreach($all as $row) {
-		$echoed = FALSE;
-		foreach($alreadyHasData as $rowDone) {
-			if($rowDone["LINKED_ID"] === $row["ID"]) {
-				$echoed = TRUE; 
+	$canCompute = 0;
+	$canComputeNeedsToBe = 0;
+	for($i = 1; $i <=3; $i++) {
+		if($_SESSION["WEEK_GLOBAL"] > $i * 3) {
+			$canComputeNeedsToBe++;
+			foreach($alreadyHasData as $dataRow) {
+				if($dataRow["LINKED_ID"] === $row["ID"] && $dataRow["WEEK"] == ($i * 3) . "") {
+					$canCompute++;
+					if($dataRow["DEADLIFT"] > 7) {
+						$repsLargerThanAdderForDeadlift += 10;
+					}
+					if($dataRow["BENCH"] > 7) {
+						$repsLargerThanAdderForBench += 10;
+					}
+					if($dataRow["BACKSQUAT"] > 7) {
+						$repsLargerThanAdderForBacksquat += 10;
+					}
+				}
+			}
+		}
+	}
+	$echoed = FALSE;
+	foreach($alreadyHasData as $dataRow) {
+		if($dataRow["LINKED_ID"] === $row["ID"] && $dataRow["WEEK"] == $_SESSION["WEEK_GLOBAL"]) {
+			$echoed = TRUE;
+			if($canComputeNeedsToBe === $canCompute) { #We have data from this week and the weeks prior
 ?>
 	<tr>
 		<td><?php echo($row["NAME"]); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.55 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.65 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.75 + $adder))/5 + 0.5)*5); ?></td>
-		<td style="background-color: #9F9;"><?php echo($rowDone["DEADLIFT"]); ?></td>
-		<td><?php echo((int)(($row["BASE_BENCH"] * (0.55 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_BENCH"] * (0.65 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_BENCH"] * (0.75 + $adder))/5 + 0.5)*5); ?></td>
-		<td style="background-color: #9F9;"><?php echo($rowDone["BENCH"]); ?></td>
-		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.55 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.65 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.75 + $adder))/5 + 0.5)*5); ?></td>
-		<td style="background-color: #9F9;"><?php echo($rowDone["BACKSQUAT"]); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td style="background-color: #9F9;"><?php echo($dataRow["DEADLIFT"]); ?></td>
+		<td><?php echo((int)(($row["BASE_BENCH"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
+		<td><?php echo((int)(($row["BASE_BENCH"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
+		<td><?php echo((int)(($row["BASE_BENCH"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
+		<td style="background-color: #9F9;"><?php echo($dataRow["BENCH"]); ?></td>
+		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
+		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
+		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
+		<td style="background-color: #9F9;"><?php echo($dataRow["BACKSQUAT"]); ?></td>
+	</tr>
+<?php
+			} else { #We have data from this week but one or more of the weeks prior are missing. Usually should not happen.
+?>
+	<tr>
+		<td><?php echo($row["NAME"]); ?></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: #9F9;"><?php echo($dataRow["DEADLIFT"]); ?></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: #9F9;"><?php echo($dataRow["BENCH"]); ?></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: #9F9;"><?php echo($dataRow["BACKSQUAT"]); ?></td>
 	</tr>
 <?php
 			}
 		}
-		if($echoed === FALSE) { 
+	}
+	if($echoed == FALSE) {
+		if($canComputeNeedsToBe === $canCompute) { #We don't have data from this week, but we have data from the weeks prior.
 ?>
 	<tr>
 		<td><?php echo($row["NAME"]); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.55 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.65 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.75 + $adder))/5 + 0.5)*5); ?></td>
-		<td style="background-color: red;"></td>
-		<td><?php echo((int)(($row["BASE_BENCH"] * (0.55 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_BENCH"] * (0.65 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_BENCH"] * (0.75 + $adder))/5 + 0.5)*5); ?></td>
-		<td style="background-color: red;"></td>
-		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.55 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.65 + $adder))/5 + 0.5)*5); ?></td>
-		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.75 + $adder))/5 + 0.5)*5); ?></td>
-		<td style="background-color: red;"></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td style="background-color: red;">Missing!</td>
+		<td><?php echo((int)(($row["BASE_BENCH"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
+		<td><?php echo((int)(($row["BASE_BENCH"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
+		<td><?php echo((int)(($row["BASE_BENCH"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
+		<td style="background-color: red;">Missing!</td>
+		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
+		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
+		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
+		<td style="background-color: red;">Missing!</td>
+	</tr>
+<?php
+		} else { #We don't have any data.
+?>
+	<tr>
+		<td><?php echo($row["NAME"]); ?></td>
+		<td colspan="12">Please enter your "As Many Reps  As Possible" from the previous week(s) to obtain lift data!</td>
 	</tr>
 <?php
 		}
