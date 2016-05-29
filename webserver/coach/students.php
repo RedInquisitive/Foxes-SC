@@ -83,25 +83,24 @@ if(isset($_POST["DELETE"])) {
 	if($editError !== "") {echo("<span>$editError</span>");}
 	if($editSuccess !== "") {echo("<p style=\"color:green; text-align: center;\">$editSuccess</p>");}
 	?>
-	<form method="post">
-		<table>
-			<style>
-				button{margin-top:0}
-			</style>
-			<tr>
-				<th>Name</th>
-				<th>Student ID</th>
-				<th>Gender</th>
-				<th></th>
-				<th>Bench</th>
-				<th>Deadlift</th>
-				<th>Backsquat</th>
-				<th colspan="2">Actions</th>
-			</tr><tr>
-				<td colspan="9">
-					<a href="create.php"><div class="headlink" style="height: 52px;"><div class="textheadlink">Add Student</div></div></a>
-				</td>
-			</tr>
+	<table>
+		<style>
+			button{margin-top:0}
+		</style>
+		<tr>
+			<th>Name</th>
+			<th>Student ID</th>
+			<th>Gender</th>
+			<th></th>
+			<th>Bench</th>
+			<th>Deadlift</th>
+			<th>Backsquat</th>
+			<th colspan="2">Actions</th>
+		</tr><tr>
+			<td colspan="9">
+				<a href="create.php"><div class="headlink" style="height: 52px;"><div class="textheadlink">Add Student</div></div></a>
+			</td>
+		</tr>
 <?php
 $stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
 $stmt->execute(array('coach' => $_SESSION['login_user'],
@@ -110,28 +109,27 @@ $stmt->execute(array('coach' => $_SESSION['login_user'],
 $all = $stmt->fetchAll();
 foreach($all as $row) {
 ?>
-			<tr>
-				<td rowspan="2"><?php echo($row["NAME"]); ?></td>
-				<td rowspan="2"><?php echo($row["STUDENT_ID"]); ?></td>
-				<td rowspan="2"><?php echo($row["GENDER"] == "F" ? "Female" : "Male"); ?></td>
-				<td style="background-color: black; color:white; border: 2px solid grey;">Pre:</td>
-				<td><?php echo($row["BASE_BENCH"]); ?></td>
-				<td><?php echo($row["BASE_DEADLIFT"]); ?></td>
-				<td><?php echo($row["BASE_BACKSQUAT"]); ?></td>
-				<td rowspan="2"><button name="EDIT" type="submit" value="<?php echo($row["ID"]); ?>">Edit</button></td>
-				<td rowspan="2"><button name="DELETE" type="submit" value="<?php echo($row["ID"]); ?>">Delete</button></td>
-				
-			</tr>
-			<tr>
-				<td style="background-color: black; color:white; border: 2px solid grey;">Post:</td>
-				<td><?php echo($row["POST_BENCH"] == 0 ? "Not Entered" : $row["POST_BENCH"]); ?></td>
-				<td><?php echo($row["POST_DEADLIFT"] == 0 ? "Not Entered" : $row["POST_DEADLIFT"]); ?></td>
-				<td><?php echo($row["POST_BACKSQUAT"] == 0 ? "Not Entered" : $row["POST_BACKSQUAT"]); ?></td>
-			</tr>
+		<tr>
+			<td rowspan="2"><?php echo($row["NAME"]); ?></td>
+			<td rowspan="2"><?php echo($row["STUDENT_ID"]); ?></td>
+			<td rowspan="2"><?php echo($row["GENDER"] == "F" ? "Female" : "Male"); ?></td>
+			<td style="background-color: black; color:white; border: 2px solid grey;">Pre:</td>
+			<td><?php echo($row["BASE_BENCH"]); ?></td>
+			<td><?php echo($row["BASE_DEADLIFT"]); ?></td>
+			<td><?php echo($row["BASE_BACKSQUAT"]); ?></td>
+			<td rowspan="2"><form method="post" action="edit.php"><button name="EDIT" type="submit" value="<?php echo($row["ID"]); ?>">Edit</button></form></td>
+			<td rowspan="2"><form method="post"><button name="DELETE" type="submit" value="<?php echo($row["ID"]); ?>">Delete</button></form></td>
+			
+		</tr>
+		<tr>
+			<td style="background-color: black; color:white; border: 2px solid grey;">Post:</td>
+			<td><?php echo($row["POST_BENCH"] == 0 ? "Not Entered" : $row["POST_BENCH"]); ?></td>
+			<td><?php echo($row["POST_DEADLIFT"] == 0 ? "Not Entered" : $row["POST_DEADLIFT"]); ?></td>
+			<td><?php echo($row["POST_BACKSQUAT"] == 0 ? "Not Entered" : $row["POST_BACKSQUAT"]); ?></td>
+		</tr>
 <?php
 }
 ?>
-		</table>
-	</form>
+	</table>
 </div>
 </body>

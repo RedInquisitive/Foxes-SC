@@ -60,8 +60,7 @@ if(isset($_POST["BASE_BENCH"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POS
 			if($error !== "") {echo("<span>$error</span>");}
 			if($editError !== "") {echo("<span>$editError</span>");}
 			if($editSuccess !== "") {echo("<p style=\"color:green;\">$editSuccess</p>");}
-			?>
-			
+			?> 
 			<h3 class="titlepadding">Name</h3>
 				<input class="text" 		
 					   type="text" 		
