@@ -23,8 +23,8 @@ if($allAllowed === null || $allAllowed === FALSE) {
 	}
 }
 
-$stmt = $conn->prepare("SELECT DISTINCT SEMESTER FROM CLASS");
-$stmt->execute();
+$stmt = $conn->prepare("SELECT DISTINCT SEMESTER FROM CLASS WHERE COACH = :coach");
+$stmt->execute(array('coach' => $_SESSION['login_user']));
 $all = $stmt->fetchAll();
 foreach($all as $row) {
 	$semesterBuilder[] = 
@@ -40,8 +40,9 @@ for($week = 1; $week <= 12; $week++) {
 
 
 if(isset($_SESSION["SEMESTER_GLOBAL"])) {
-	$stmt = $conn->prepare("SELECT PERIOD FROM CLASS WHERE SEMESTER = :semester");
-	$stmt->execute(array('semester' => $_SESSION["SEMESTER_GLOBAL"]));
+	$stmt = $conn->prepare("SELECT PERIOD FROM CLASS WHERE SEMESTER = :semester AND COACH = :coach");
+	$stmt->execute(array('semester' => $_SESSION["SEMESTER_GLOBAL"],
+						 'coach' => $_SESSION['login_user']));
 	$all = $stmt->fetchAll();
 	if($allAllowed === TRUE) {
 		$periodBuilder[] = '<option value="ALL" style="width: 100%;">ALL periods</option>';
@@ -91,10 +92,10 @@ if(isset($_SESSION["WEEK_GLOBAL"])) {
 		$_SESSION["WEEK_GLOBAL"] . '</option>';
 	}
 }
-?>
+?> 
 <div id="dropdowns" style="margin: 0;">
 	<form method="post" style="float: left;">
-		<select name='SEMESTER_GLOBAL' onchange='if(this.value != 0) {this.form.submit();}'>
+		<select name='SEMESTER_GLOBAL' onchange='if(this.value != 0) {loading(); this.form.submit();}'>
 <?php if(!isset($_SESSION["SEMESTER_GLOBAL"])) { ?>
 			 <option value='NOTHING'>Select Semester</option>
 			 <?php } foreach($semesterBuilder as $row) {echo($row);} ?>
@@ -102,7 +103,7 @@ if(isset($_SESSION["WEEK_GLOBAL"])) {
 		</select>
 	</form>
 	<form method="post" style="float: right;">
-		<select name='PERIOD_GLOBAL' onchange='if(this.value != 0) {this.form.submit();}'>
+		<select name='PERIOD_GLOBAL' onchange='if(this.value != 0) {loading(); this.form.submit();}'>
 <?php if(!isset($_SESSION["PERIOD_GLOBAL"])) { ?>
 			 <option value='NOTHING'>Select Period</option>
 			 <?php } foreach($periodBuilder as $row) {echo($row);} ?>
@@ -111,7 +112,7 @@ if(isset($_SESSION["WEEK_GLOBAL"])) {
 	</form>
 	<?php if($weekNeeded === TRUE) { ?>
 	<form method="post" style="float: right;">
-		<select name='WEEK_GLOBAL' onchange='if(this.value != 0) {this.form.submit();}'>
+		<select name='WEEK_GLOBAL' onchange='if(this.value != 0) {loading(); this.form.submit();}'>
 <?php if(!isset($_SESSION["WEEK_GLOBAL"])) { ?>
 			 <option value='NOTHING'>Select Week</option>
 			 <?php } foreach($weekBuilder as $row) {echo($row);} ?>
