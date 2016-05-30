@@ -45,8 +45,9 @@ if((isset($_POST["CREATE_SEMESTER_NAME"]) || isset($_POST["CREATE_SEMESTER_SELEC
 		break;
 	}
 	
-	$stmt = $conn->prepare("INSERT INTO CLASS (SEMESTER, PERIOD) VALUES (:semester, :period)");
-	$stmt->execute(array('semester' => $_POST["CREATE_SEMESTER_NAME"],
+	$stmt = $conn->prepare("INSERT INTO CLASS (COACH, SEMESTER, PERIOD) VALUES (:coach, :semester, :period)");
+	$stmt->execute(array('coach' => $_SESSION['login_user'],
+						 'semester' => $_POST["CREATE_SEMESTER_NAME"],
 						 'period' => $_POST["CREATE_SEMESTER_PERIOD"]));
 						 
 	$editSuccess = 'Whoo, you created the period "' . $_POST["CREATE_SEMESTER_PERIOD"] . '" under the semester "' . $_POST["CREATE_SEMESTER_NAME"] . '" successfully!';
