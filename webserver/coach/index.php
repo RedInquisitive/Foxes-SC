@@ -9,6 +9,12 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<script>
+	function loading() { 
+		console.log("test");
+		document.getElementById("loading").style.display="block";
+	}
+	</script>
 </head>
 <body>
 <div id="navbar">
@@ -100,4 +106,13 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 		</tr>
 	</table>
 </div>
+<div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
+	<image style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
+</div>
+<script> 
+var forms = document.getElementsByTagName('form');
+for(i=0;i<forms.length;i++) {
+	forms[i].addEventListener("submit", loading, false);
+}
+</script>
 </body>

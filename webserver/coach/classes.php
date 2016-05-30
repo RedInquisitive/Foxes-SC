@@ -9,8 +9,8 @@ $periodBuilder = array();
 include '/home/aj4057/verify_iron.php';
 include '/home/aj4057/config_iron.php'; #Connect to db.
 
-$stmt = $conn->prepare("SELECT DISTINCT SEMESTER FROM CLASS");
-$stmt->execute();
+$stmt = $conn->prepare("SELECT DISTINCT SEMESTER FROM CLASS WHERE COACH = :coach");
+$stmt->execute(array('coach' => $_SESSION['login_user']));
 $all = $stmt->fetchAll();
 foreach($all as $row) {
 	$semesterBuilder[] = 
@@ -20,8 +20,8 @@ foreach($all as $row) {
 
 do {
 if((isset($_POST["CREATE_SEMESTER_NAME"]) || isset($_POST["CREATE_SEMESTER_SELECT"])) && isset($_POST["CREATE_SEMESTER_PERIOD"])) {
-	$stmt = $conn->prepare("SELECT SEMESTER, PERIOD FROM CLASS");
-	$stmt->execute();
+	$stmt = $conn->prepare("SELECT SEMESTER, PERIOD FROM CLASS WHERE COACH = :coach");
+	$stmt->execute(array('coach' => $_SESSION['login_user']));
 	$all = $stmt->fetchAll();
 	
 	if($_POST["CREATE_SEMESTER_SELECT"] !== "NOTHING") {
@@ -183,8 +183,9 @@ foreach($semesterBuilder as $row) {echo($row);}
 	</div><br><br><br>
 <?php
 if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"])) {
-	$stmt = $conn->prepare("SELECT PERIOD FROM CLASS WHERE SEMESTER = :semester");
-	$stmt->execute(array('semester' => $_POST["DESTROY_PERIOD_FROM_SEMESTER"]));
+	$stmt = $conn->prepare("SELECT PERIOD FROM CLASS WHERE SEMESTER = :semester AND COACH = :coach");
+	$stmt->execute(array('semester' => $_POST["DESTROY_PERIOD_FROM_SEMESTER"],
+						 'coach' => $_SESSION['login_user']));
 	$all = $stmt->fetchAll();
 	foreach($all as $row) {
 		$periodBuilder[] = '<option value="' . $row['PERIOD'] . '" style="width: 100%;">' . $row['PERIOD'] . '</option>';
