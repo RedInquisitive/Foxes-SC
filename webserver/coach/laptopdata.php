@@ -179,7 +179,7 @@ if($usingTemp === "YES") {
 	<div class="center">
 		<h3 class="titlepadding">If needed, you can change the week here.</h3>
 		<form method="post">
-			<select name='WEEK_LOCAL'  class="classestext" onchange='if(this.value != 0) {window.onbeforeunload = null; this.form.submit();}'>
+			<select name='WEEK_LOCAL'  class="classestext" onchange='if(this.value != 0) {loading(); window.onbeforeunload = null; this.form.submit();}'>
 <?php foreach($weekBuilder as $row) {echo("\t\t\t\t" . $row . "\n");} ?>
 			</select>
 		</form>

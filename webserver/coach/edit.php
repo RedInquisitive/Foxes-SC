@@ -174,7 +174,7 @@ if(isset($_POST["WEEK_LOCAL"])) {
 			?> 
 
 			<h3 class="titlepadding">WARNING: Switching this field will clear any unsaved data below!</h3>
-				<select class="classestext" name='WEEK_LOCAL' onchange='if(this.value != 0) {this.form.submit();}'>
+				<select class="classestext" name='WEEK_LOCAL' onchange='if(this.value != 0) {loading(); this.form.submit();}'>
 <?php foreach($weekBuilder as $weeks) {echo($weeks);} ?> 
 				</select>
 				
