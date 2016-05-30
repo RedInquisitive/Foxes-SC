@@ -35,7 +35,7 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 	</div>
 </div>
 <div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
-	<image style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
+	<img style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
 </div>
 <script> 
 var forms = document.getElementsByTagName('form');
