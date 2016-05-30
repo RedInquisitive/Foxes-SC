@@ -250,7 +250,8 @@ if($row["GENDER"] == "F") {
 }
 ?>
 			</select>
-					   
+			<br><br><br>
+			<h3 class="titlepadding">Set any of the fields below to 0 for "Not Entered"</h3>
 			<h3 class="titlepadding">Original Bench MAX</h3>
 				<input class="text"
 					   type="number"
@@ -272,21 +273,21 @@ if($row["GENDER"] == "F") {
 					   placeholder="<?php echo($row["BASE_BACKSQUAT"]); ?>" 
 					   value="<?php echo($row["BASE_BACKSQUAT"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Post Test Bench MAX (Set to 0 for Not Entered)</h3>
+			<h3 class="titlepadding">Post Test Bench MAX</h3>
 				<input class="text"
 					   type="number"
 					   name="POST_BENCH"
 					   placeholder="<?php echo($row["POST_BENCH"]); ?>" 
 					   value="<?php echo($row["POST_BENCH"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Post Test Deadlift MAX (Set to 0 for Not Entered)</h3>
+			<h3 class="titlepadding">Post Test Deadlift MAX</h3>
 				<input class="text"
 					   type="number"
 					   name="POST_DEADLIFT"
 					   placeholder="<?php echo($row["POST_DEADLIFT"]); ?>" 
 					   value="<?php echo($row["POST_DEADLIFT"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Post Test Squat MAX (Set to 0 for Not Entered)</h3>
+			<h3 class="titlepadding">Post Test Squat MAX</h3>
 				<input class="text"
 					   type="number"
 					   name="POST_BACKSQUAT"
@@ -298,7 +299,7 @@ if($row["GENDER"] == "F") {
 	</div>
 </div>
 <div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
-	<image style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
+	<img style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
 </div>
 <script> 
 var forms = document.getElementsByTagName('form');
