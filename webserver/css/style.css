@@ -100,10 +100,15 @@ h3 {
 	border: 2px solid #385D8A;
 	background-color: #4F81BD;
 	padding: 5px;
+	text-decoration: none;
 }
-.headlink:hover {
+.headlink:hover, .headlink:focus {
 	border: 2px solid #496E9B;
 	background-color: #5F92CE;
+}
+.headlink div {
+	width: 100%;
+	height: 100%;
 }
 .textheadlink {
 	position: relative;
@@ -170,11 +175,11 @@ input[type=submit].goodbutton, button.goodbutton {
 	border: 2px solid #0C0;
 }
 
-input[type=submit]:hover , button:hover{
+input[type=submit]:hover , button:hover, input[type=submit]:focus , button:focus{
 	background-color:#EE0000;
 	border:2px solid #FF0000;
 }
-input[type=submit].goodbutton:hover , button.goodbutton:hover{
+input[type=submit].goodbutton:hover , button.goodbutton:hover, input[type=submit].goodbutton:focus , button.goodbutton:focus {
 	background-color:#0B0;
 	border:2px solid #0D0;
 }
