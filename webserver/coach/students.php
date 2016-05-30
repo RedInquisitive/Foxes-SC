@@ -119,9 +119,9 @@ foreach($all as $row) {
 			<td rowspan="2"><?php echo($row["STUDENT_ID"]); ?></td>
 			<td rowspan="2"><?php echo($row["GENDER"] == "F" ? "Female" : "Male"); ?></td>
 			<td style="background-color: black; color:white; border: 2px solid grey;">Pre:</td>
-			<td><?php echo($row["BASE_BENCH"]); ?></td>
-			<td><?php echo($row["BASE_DEADLIFT"]); ?></td>
-			<td><?php echo($row["BASE_BACKSQUAT"]); ?></td>
+			<td><?php echo($row["BASE_BENCH"] == 0 ? "Not Entered" : $row["BASE_BENCH"]); ?></td>
+			<td><?php echo($row["BASE_DEADLIFT"] == 0 ? "Not Entered" : $row["BASE_DEADLIFT"]); ?></td>
+			<td><?php echo($row["BASE_BACKSQUAT"] == 0 ? "Not Entered" : $row["BASE_BACKSQUAT"]); ?></td>
 			<td rowspan="2"><form method="post" action="edit.php"><button name="EDIT" type="submit" value="<?php echo($row["ID"]); ?>">Edit</button></form></td>
 			<td rowspan="2"><form method="post"><button name="DELETE" type="submit" value="<?php echo($row["ID"]); ?>">Delete</button></form></td>
 			
@@ -138,7 +138,7 @@ foreach($all as $row) {
 	</table>
 </div>
 <div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
-	<image style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
+	<img style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
 </div>
 <script> 
 var forms = document.getElementsByTagName('form');
