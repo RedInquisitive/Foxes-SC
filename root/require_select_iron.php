@@ -125,7 +125,7 @@ if(!isset($_SESSION["SEMESTER_GLOBAL"]) || !isset($_SESSION["PERIOD_GLOBAL"]) ||
 ?>
 </div>
 <div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
-	<image style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
+	<img style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
 </div>
 <div id="body">
 	<h1>Wait!</h1>
