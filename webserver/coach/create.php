@@ -22,9 +22,10 @@ if(isset($_POST["BASE_BENCH"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POS
 		break;
 	}
 	
-	$stmt = $conn->prepare("INSERT INTO STUDENT$ (STUDENT_ID, NAME, PERIOD, SEMESTER, COACH, BASE_BENCH, BASE_BACKSQUAT, BASE_DEADLIFT) VALUES (:studentid, :name, :period, :semester, :coach, :bench, :backsquat, :deadlift)");
+	$stmt = $conn->prepare("INSERT INTO STUDENT$ (STUDENT_ID, GENDER, NAME, PERIOD, SEMESTER, COACH, BASE_BENCH, BASE_BACKSQUAT, BASE_DEADLIFT) VALUES (:studentid, :gender, :name, :period, :semester, :coach, :bench, :backsquat, :deadlift)");
 	$stmt->execute(array('studentid' => $_POST["STUDENT_ID"],
 					 'name' => $_POST["NAME"],
+					 'gender' => trim($_POST["GENDER"]),
 					 'period' => $_SESSION["PERIOD_GLOBAL"],
 					 'semester' => $_SESSION["SEMESTER_GLOBAL"],
 					 'coach' => $_SESSION['login_user'],
@@ -107,7 +108,7 @@ if(isset($_POST["BASE_BENCH"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POS
 	</div>
 </div>
 <div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
-	<image style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
+	<img style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
 </div>
 <script> 
 var forms = document.getElementsByTagName('form');
