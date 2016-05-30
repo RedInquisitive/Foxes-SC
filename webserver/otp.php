@@ -4,23 +4,17 @@ include '/home/aj4057/config_iron.php';
 $username = $_POST["COACH"];
 $password = $_POST["PASSWORD"];
 
-if($_POST["ROOT"] === "SomeSuperSecurePasswordThatNobodyKnowsButYou") {
-	try {
-		$conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	} catch(PDOException $e) {
-		$error = "Could not connect to the database. This should never happen.";
-		break;
+if(isset($_POST["ROOT"])) {
+	if($_POST["ROOT"] === "Like, this should be really secret.") {
+		$hashword = password_hash($password, PASSWORD_BCRYPT);
+
+		$stmt = $conn->prepare("INSERT INTO COACH (username, password) VALUES (:username, :hashword)");
+		$stmt->execute(array('username' => $username,
+							 'hashword' => $hashword));
+		$error = "The account was created... Probably.";
+	} else {
+		$error = "Root password is wrong!";
 	}
-
-
-	$hashword = password_hash($password, PASSWORD_BCRYPT);
-
-	$stmt = $conn->prepare("INSERT INTO COACH (username, password) VALUES (:username, :hashword)");
-	$stmt->execute(array('username' => $username,
-						 'hashword' => $hashword));
-} else {
-	echo "Root password is wrong!";
 }
 ?>
 <!DOCTYPE html>
