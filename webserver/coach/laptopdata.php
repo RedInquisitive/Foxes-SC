@@ -154,6 +154,9 @@ $alreadyHasData = $stmt->fetchAll();
 		return message; // For Chrome, Safari, IE8+ and Opera 12+
 	};
 	window.onbeforeunload = confirmOnPageExit;
+	function loading() { 
+		document.getElementById("loading").style.display="block";
+	}
 	</script>
 </head>
 <body>
@@ -229,4 +232,13 @@ if($usingTemp === "YES") {
 		<a href="../logout.php"><div class="headlink"><div class="textheadlink">Leave this page and return to the login screen.</div></div></a>
 	</div>
 </div>
+<div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
+	<image style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
+</div>
+<script> 
+var forms = document.getElementsByTagName('form');
+for(i=0;i<forms.length;i++) {
+	forms[i].addEventListener("submit", loading, false);
+}
+</script>
 </body>

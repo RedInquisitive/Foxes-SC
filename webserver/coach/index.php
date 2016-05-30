@@ -11,7 +11,6 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
 	<script>
 	function loading() { 
-		console.log("test");
 		document.getElementById("loading").style.display="block";
 	}
 	</script>
