@@ -37,8 +37,8 @@ if((int)$_SESSION["WEEK_GLOBAL"] % 3 == "0") {
 <table>
 	<tr>
 		<th>Name</th>
-		<th colspan="4">Dead Lift</th>
 		<th colspan="4">Bench</th>
+		<th colspan="4">Dead Lift</th>
 		<th colspan="4">Back Squat</th>
 	</tr><tr>
 		<th>Reps</th>
@@ -109,11 +109,11 @@ foreach($all as $row) {
 			foreach($alreadyHasData as $dataRow) {
 				if($dataRow["LINKED_ID"] === $row["ID"] && $dataRow["WEEK"] == ($i * 3) . "") {
 					$canCompute++;
-					if($dataRow["DEADLIFT"] > 7) {
-						$repsLargerThanAdderForDeadlift += 10;
-					}
 					if($dataRow["BENCH"] > 7) {
 						$repsLargerThanAdderForBench += 10;
+					}
+					if($dataRow["DEADLIFT"] > 7) {
+						$repsLargerThanAdderForDeadlift += 10;
 					}
 					if($dataRow["BACKSQUAT"] > 7) {
 						$repsLargerThanAdderForBacksquat += 10;
@@ -133,14 +133,15 @@ foreach($all as $row) {
 ?>
 	<tr>
 		<td><?php echo($row["NAME"]); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
-		<td style="background-color: #9F9;"><?php echo($dataRow["DEADLIFT"]); ?></td>
+
 		<td><?php echo((int)(($row["BASE_BENCH"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
 		<td><?php echo((int)(($row["BASE_BENCH"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
 		<td><?php echo((int)(($row["BASE_BENCH"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
 		<td style="background-color: #9F9;"><?php echo($dataRow["BENCH"]); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td style="background-color: #9F9;"><?php echo($dataRow["DEADLIFT"]); ?></td>
 		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
 		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
 		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
@@ -151,14 +152,15 @@ foreach($all as $row) {
 ?>
 	<tr>
 		<td><?php echo($row["NAME"]); ?></td>
-		<td style="background-color: red;"></td>
-		<td style="background-color: red;"></td>
-		<td style="background-color: red;"></td>
-		<td style="background-color: #9F9;"><?php echo($dataRow["DEADLIFT"]); ?></td>
+		
 		<td style="background-color: red;"></td>
 		<td style="background-color: red;"></td>
 		<td style="background-color: red;"></td>
 		<td style="background-color: #9F9;"><?php echo($dataRow["BENCH"]); ?></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: red;"></td>
+		<td style="background-color: #9F9;"><?php echo($dataRow["DEADLIFT"]); ?></td>
 		<td style="background-color: red;"></td>
 		<td style="background-color: red;"></td>
 		<td style="background-color: red;"></td>
@@ -174,13 +176,14 @@ foreach($all as $row) {
 ?>
 	<tr>
 		<td><?php echo($row["NAME"]); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
-		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
-		<td style="background-color: red;">Missing!</td>
+
 		<td><?php echo((int)(($row["BASE_BENCH"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
 		<td><?php echo((int)(($row["BASE_BENCH"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
 		<td><?php echo((int)(($row["BASE_BENCH"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBench); ?></td>
+		<td style="background-color: red;">Missing!</td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
+		<td><?php echo((int)(($row["BASE_DEADLIFT"] * (0.75 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForDeadlift); ?></td>
 		<td style="background-color: red;">Missing!</td>
 		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.55 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
 		<td><?php echo((int)(($row["BASE_BACKSQUAT"] * (0.65 + $adder))/5 + 0.5)*5 + $repsLargerThanAdderForBacksquat); ?></td>
