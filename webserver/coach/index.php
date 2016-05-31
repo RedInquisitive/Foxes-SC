@@ -18,17 +18,17 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 <body>
 <div id="navbar">
 	<div id="header" style="margin: 0;">
-		<a href="projector.php" class="headlink"><div id="projector"><div class="textheadlink">Projector View</div></div></a>
-		<a href="laptop.php" class="headlink"><div id="laptop"><div class="textheadlink">Laptop View</div></div></a>
-		<a href="links.php" class="headlink"><div id="links"><div class="textheadlink">Modify Links</div></div></a>
-		<a href="students.php" class="headlink"><div id="students"><div class="textheadlink">Modify Students</div></div></a>
-		<a href="classes.php" class="headlink"><div id="classes"><div class="textheadlink">Modify Classes</div></div></a>
+		<a href="projector.php" class="headlink"><div class="textheadlink">Projector View</div></a>
+		<a href="laptop.php" class="headlink"><div class="textheadlink">Laptop View</div></a>
+		<a href="links.php" class="headlink"><div class="textheadlink">Modify Links</div></a>
+		<a href="students.php" class="headlink"><div class="textheadlink">Modify Students</div></a>
+		<a href="classes.php" class="headlink"><div class="textheadlink">Modify Classes</div></a>
 	</div>
 	<?php include '/home/aj4057/require_select_iron.php';?>
 </div>
 <div class="center">
 	<div style="margin: 20px 0 20px; height: 50px;">
-		<a href="../logout.php"><div class="headlink"><div class="textheadlink">Log Out</div></div></a>
+		<a href="../logout.php" class="headlink"><div class="textheadlink">Log Out</div></a>
 	</div>
 </div>
 <?php

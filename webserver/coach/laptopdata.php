@@ -110,7 +110,7 @@ if($stmt->rowCount() == 0) {
 	</div>
 	<div class="center">
 		<div style="margin: 20px; height: 100px;">
-			<a href="../logout.php"><div class="headlink"><div class="textheadlink">Leave this page and return to the login screen.</div></div></a>
+			<a href="../logout.php" class="headlink"><div class="textheadlink">Leave this page and return to the login screen.</div></a>
 		</div>
 	</div>
 </div>
@@ -229,7 +229,7 @@ if($usingTemp === "YES") {
 </div>
 <div class="center">
 	<div style="margin: 80px 0 20px; height: 100px;">
-		<a href="../logout.php"><div class="headlink"><div class="textheadlink">Leave this page and return to the login screen.</div></div></a>
+		<a href="../logout.php" class="headlink"><div class="textheadlink">Leave this page and return to the login screen.</div></a>
 	</div>
 </div>
 <div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">

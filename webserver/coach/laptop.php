@@ -19,7 +19,7 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 <body>
 <div id="navbar">
 	<div id="exit" style="margin: 0;">
-		<a href="index.php"><div class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">No, take me back!</div></div></a>
+		<a href="index.php" class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">No, take me back!</div></a>
 	</div>
 	<?php include '/home/aj4057/require_select_iron.php';?>
 </div>
@@ -30,7 +30,7 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 		<p>Students from the period and semester that you select above will still be able to enter their information.</p>
 		<p>The week you select is simply a suggestion, students will be able to enter information from the weeks prior.</p> 
 		<div style="margin: 20px; height: 100px;">
-			<a href="laptopdata.php"><div class="headlink" style="background-color:#DD0000;	color:#fff;	border:2px solid #FF0000; padding:10px;	font-size:20px; cursor:pointer; border-radius:5px;"><div class="textheadlink">Use <?php echo($_SESSION["SEMESTER_GLOBAL"] . ', ' . $_SESSION["PERIOD_GLOBAL"]); ?></div></div></a>
+			<a href="laptopdata.php" class="headlink" id="speciallink"><div class="textheadlink">Use <?php echo($_SESSION["SEMESTER_GLOBAL"] . ', ' . $_SESSION["PERIOD_GLOBAL"]); ?></div></a>
 		</div>
 	</div>
 </div>

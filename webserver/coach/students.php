@@ -40,7 +40,7 @@ if(isset($_POST["DELETE"])) {
 <body>
 <div id="navbar">
 	<div id="exit" style="margin: 0;">
-		<a href="students.php"><div class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">No, take me back!</div></div></a>
+		<a href="students.php" class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">No, take me back!</div></a>
 	</div>
 </div>
 <div class="pseudobody">
@@ -77,7 +77,7 @@ if(isset($_POST["DELETE"])) {
 <body>
 <div id="navbar">
 	<div id="exit" style="margin: 0;">
-		<a href="index.php"><div class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">Exit</div></div></a>
+		<a href="index.php" class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">Exit</div></a>
 	</div>
 	<?php include '/home/aj4057/require_select_iron.php';?>
 </div>
@@ -103,7 +103,7 @@ if(isset($_POST["DELETE"])) {
 			<th colspan="2">Actions</th>
 		</tr><tr>
 			<td colspan="9">
-				<a href="create.php"><div class="headlink" style="height: 52px;"><div class="textheadlink">Add Student</div></div></a>
+				<a href="create.php" class="headlink" style="height: 52px;"><div class="textheadlink">Add Student</div></a>
 			</td>
 		</tr>
 <?php

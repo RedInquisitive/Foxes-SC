@@ -67,7 +67,7 @@ if(isset($_POST["DESTROY_SEMESTER"]) && $_POST["DESTROY_SEMESTER"] !== "NOTHING"
 <body>
 <div id="navbar">
 	<div id="exit" style="margin: 0;">
-		<a href="classes.php"><div class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">No, take me back!</div></div></a>
+		<a href="classes.php" class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">No, take me back!</div></a>
 	</div>
 </div>
 <div class="pseudobody">
@@ -126,7 +126,7 @@ die();
 <body>
 <div id="navbar">
 	<div id="exit" style="margin: 0;">
-		<a href="index.php"><div class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">Exit</div></div></a>
+		<a href="index.php" class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">Exit</div></a>
 	</div>
 </div>
 

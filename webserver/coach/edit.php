@@ -156,7 +156,7 @@ if(isset($_POST["WEEK_LOCAL"])) {
 <body>
 <div id="navbar">
 	<div id="exit" style="margin: 0;">
-		<a href="students.php"><div class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">Exit</div></div></a>
+		<a href="students.php" class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">Exit</div></a>
 	</div>
 </div>
 <div class="pseudobody">
