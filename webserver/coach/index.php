@@ -119,8 +119,12 @@ foreach($workouts as $workoutname => $workout) {
 		$averages[$workoutname]["TOTAL_AVERAGE"] = "Not Enough Data!";
 	}
 }
-$rawPowerPre = $rawPowerPre/$rawPowerPreNum;
-$rawPowerPost = $rawPowerPost/$rawPowerPostNum;
+if($rawPowerPreNum != 0) {
+	$rawPowerPre = $rawPowerPre/$rawPowerPreNum;
+}
+if($rawPowerPostNum != 0) {
+	$rawPowerPost = $rawPowerPost/$rawPowerPostNum;
+}
 ?>
 <div id="body">
 	<h1>Results for <?php echo($_SESSION["SEMESTER_GLOBAL"]); ?>, All Periods.</h1>

@@ -19,6 +19,60 @@ foreach($all as $row) {
 }
 
 do {
+if(isset($_POST["DESTROY_SEMESTER_REAL"]) && isset($_POST["password"])) {
+	$stmt = $conn->prepare("SELECT USERNAME, PASSWORD FROM COACH WHERE USERNAME = :username");
+	$stmt->execute(array('username' => $_SESSION['login_user']));
+	$row = $stmt->fetch();
+	
+	if(!(password_verify($_POST["password"], $row["PASSWORD"]))) {
+		$error = "When you tried to destroy the semester, the username or password was incorrect!"; 
+		break;
+	}
+	$stmt = $conn->prepare("DELETE FROM CLASS WHERE COACH = :coach AND SEMESTER = :semester");
+	$stmt->execute(array('coach' => $_SESSION['login_user'],
+						 'semester' => $_POST["DESTROY_SEMESTER_REAL"]));
+	
+	$stmt = $conn->prepare("SELECT ID FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester");
+	$stmt->execute(array('coach' => $_SESSION['login_user'],
+						 'semester' => $_POST["DESTROY_SEMESTER_REAL"]));
+	$all = $stmt->fetchAll();
+	
+	if($stmt->rowCount() > 0) {
+		$quarry = "DELETE FROM DATA WHERE ";
+		$params =  array();
+		$i = 0;
+		foreach($all as $row) {
+			if ($row !== end($all)) {
+				$quarry = $quarry . "LINKED_ID = :p$i OR ";
+				$params["p$i"] = $row["ID"];
+			} else {
+				$quarry = $quarry . "LINKED_ID = :p$i";
+				$params["p$i"] = $row["ID"];
+			}
+			$i++;
+		}
+		$stmt = $conn->prepare($quarry);
+		$stmt->execute($params);
+	}
+	
+	$stmt = $conn->prepare("DELETE FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester");
+	$stmt->execute(array('coach' => $_SESSION['login_user'],
+						 'semester' => $_POST["DESTROY_SEMESTER_REAL"]));
+						 
+	$editSuccess = "Done, the semester " . $_POST["DESTROY_SEMESTER_REAL"] . " is gone forever.";
+}
+
+if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER_REAL"]) && isset($_POST["DESTROY_PERIOD_REAL"])  && isset($_POST["password"])) {
+	$stmt = $conn->prepare("SELECT USERNAME, PASSWORD FROM COACH WHERE USERNAME = :username");
+	$stmt->execute(array('username' => $_SESSION['login_user']));
+	$row = $stmt->fetch();
+	
+	if(!(password_verify($_POST["password"], $row["PASSWORD"]))) {
+		$error = "When you tried to destroy the period, the username or password was incorrect!"; 
+		break;
+	}
+}
+
 if((isset($_POST["CREATE_SEMESTER_NAME"]) || isset($_POST["CREATE_SEMESTER_SELECT"])) && isset($_POST["CREATE_SEMESTER_PERIOD"])) {
 	$stmt = $conn->prepare("SELECT SEMESTER, PERIOD FROM CLASS WHERE COACH = :coach");
 	$stmt->execute(array('coach' => $_SESSION['login_user']));
@@ -36,8 +90,6 @@ if((isset($_POST["CREATE_SEMESTER_NAME"]) || isset($_POST["CREATE_SEMESTER_SELEC
 			}
 		}
 	}
-	
-	
 	
 	if(trim($_POST["CREATE_SEMESTER_NAME"]) === "" || trim($_POST["CREATE_SEMESTER_PERIOD"]) === "" ||
 	   trim($_POST["CREATE_SEMESTER_NAME"]) === "NOTHING" || trim($_POST["CREATE_SEMESTER_PERIOD"]) === "NOTHING") {
@@ -62,7 +114,6 @@ if(isset($_POST["DESTROY_SEMESTER"]) && $_POST["DESTROY_SEMESTER"] !== "NOTHING"
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="../css/style.css">
-	
 </head>
 <body>
 <div id="navbar">
@@ -79,7 +130,64 @@ if(isset($_POST["DESTROY_SEMESTER"]) && $_POST["DESTROY_SEMESTER"] !== "NOTHING"
 		<form method="post">
 			<input type="hidden" name="DESTROY_SEMESTER_REAL" value="<?php echo($_POST["DESTROY_SEMESTER"]);?>">
 			<h3>Password: </h3><div class="padding"><input type="password" id="password" name="password" autocomplete="off"></div><br>
-			<div class="padding"><button id="yes" name="submit" type="submit" value="submit">Yes, delete <?php echo($_POST["DESTROY_SEMESTER"]);?> forever (A long time!)</button></div>
+			<div class="padding"><button id="yes" type="submit">Yes, delete <?php echo($_POST["DESTROY_SEMESTER"]);?> forever (A long time!)</button></div>
+		</form>
+		<span id="hide" style="font-size:40px;">Wait 5 more seconds...</span>
+	</div>
+</div>
+<script>
+document.getElementById("yes").style.display = "none";
+var time = 5;
+function countDown() {
+	if(time > 1) {
+		document.getElementById("hide").innerHTML = "Wait "  + time + " more seconds...";
+		time = time - 1;
+		setTimeout(countDown,1000);
+	} else if(time == 1) {
+		document.getElementById("hide").innerHTML = "Wait 1 more second...";
+		time = time - 1;
+		setTimeout(countDown,1000);
+	} else {
+		document.getElementById("yes").style.display = "block"; 
+		document.getElementById("hide").style.display = "none";
+	}
+}
+countDown();
+</script>
+</body>
+<?php
+die();
+}
+
+if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"]) && $_POST["DESTROY_PERIOD_FROM_SEMESTER"] !== "NOTHING" &&
+   isset($_POST["DESTROY_PERIOD"]) && $_POST["DESTROY_PERIOD"] !== "NOTHING" &&
+   isset($_POST["DELETE"]) && $_POST["DELETE"] === "USER") {
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Destroy Period</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+<div id="navbar">
+	<div id="exit" style="margin: 0;">
+		<a href="classes.php" class="headlink" style="border-radius: 0 0 30px 0;"><div class="textheadlink">No, take me back!</div></a>
+	</div>
+</div>
+<div class="pseudobody">
+	<h1>Are you sure?</h1>
+	<div class="center" style="font-size: 22px; margin-bottom: 20px;">
+		<p>You are about to destroy the period "<?php echo($_POST["DESTROY_PERIOD"]);?>" from "<?php echo($_POST["DESTROY_PERIOD_FROM_SEMESTER"]);?>" FOREVER!</p>
+		<p>This will delete all the students and their data in this period as well.</p><br>
+		<p>Are you REALLY sure you want to do this?</p>
+		<form method="post">
+			<input type="hidden" name="DESTROY_PERIOD_FROM_SEMESTER_REAL" value="<?php echo($_POST["DESTROY_PERIOD_FROM_SEMESTER"]);?>">
+			<input type="hidden" name="DESTROY_PERIOD_REAL" value="<?php echo($_POST["DESTROY_PERIOD"]);?>">
+			<h3>Password: </h3><div class="padding"><input type="password" id="password" name="password" autocomplete="off"></div><br>
+			<div class="padding"><button id="yes" type="submit">Yes, delete "<?php echo($_POST["DESTROY_PERIOD"]);?>" from "<?php echo($_POST["DESTROY_PERIOD_FROM_SEMESTER"]);?>" forever (A long time!)</button></div>
 		</form>
 		<span id="hide" style="font-size:40px;">Wait 5 more seconds...</span>
 	</div>
@@ -135,32 +243,30 @@ die();
 	<div class="center">
 		<div class="padding">
 			<form method="post">
-<?php
-if($error !== "") {echo("<span>$error</span>");}
-if($editError !== "") {echo("<span>$editError</span>");}
-if($editSuccess !== "") {echo("<p style=\"color:green;\">$editSuccess</p>");}
-?>
+				<?php
+				if($error !== "") {echo("<span>$error</span>");}
+				if($editError !== "") {echo("<span>$editError</span>");}
+				if($editSuccess !== "") {echo("<p style=\"color:green;\">$editSuccess</p>");}
+				?>
 				<h3 class="titlepadding">Create new semester with the name...</h3>
-					<input class="text" 		
-						   type="text" 		
-						   name="CREATE_SEMESTER_NAME" 
-						   placeholder="ex: Spring 2016"><br>
+				<input class="text" 		
+					   type="text" 		
+					   name="CREATE_SEMESTER_NAME" 
+					   placeholder="ex: Spring 2016"><br>
 				
 				<h3 class="titlepadding">...OR select an existing semester from this drop-down list...</h3>
-
-<select name='CREATE_SEMESTER_SELECT' class="classestext">
-<option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
-<?php
-foreach($semesterBuilder as $row) {echo($row);}
-?> 
-</select>
-
-<br><br><br>			
+				<select name='CREATE_SEMESTER_SELECT' class="classestext">
+					<option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
+					<?php
+					foreach($semesterBuilder as $row) {echo($row);}
+					?> 
+				</select>
+				<br><br><br>			
 				<h3 class="titlepadding">...and then add the period to it...</h3>
-					<input class="text"
-						   type="text"
-						   name="CREATE_SEMESTER_PERIOD"
-						   placeholder="ex: Period 1"><br>
+				<input class="text"
+					   type="text"
+					   name="CREATE_SEMESTER_PERIOD"
+					   placeholder="ex: Period 1"><br>
 
 				<div class="padding"><input type="submit"	value="Create Period!" class="goodbutton"></div>
 			</form><br>
@@ -174,15 +280,13 @@ foreach($semesterBuilder as $row) {echo($row);}
 		<div class="padding">
 			<form method="post">
 				<h3 class="titlepadding">Destroy semester</h3>
-
-<select name='DESTROY_SEMESTER' class="classestext">
-<option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
-<?php
-foreach($semesterBuilder as $row) {echo($row);}
-?> 
-</select>
-
-				<div class="padding"><button name="submit" type="submit" value="submit">Delete (Requires confirmation)</button></div>
+				<select name='DESTROY_SEMESTER' class="classestext">
+					<option value='NOTHING' style="width: 100%;">Click to select an existing semester</option>
+					<?php
+					foreach($semesterBuilder as $row) {echo($row);}
+					?> 
+				</select>
+				<div class="padding"><button type="submit">Delete (Requires confirmation)</button></div>
 			</form>
 		</div>
 	</div><br><br><br>
@@ -210,26 +314,23 @@ if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"])) {
 ?>	
 	<div class="center">
 		<div class="padding">
-			<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>#destroy">
+			<form method="post">
 				<h3 class="titlepadding">Destroy period from semester...</h3>
-
-<select name='DESTROY_PERIOD_FROM_SEMESTER' class="classestext" onchange='if(this.value != 0) {loading(); this.form.submit();}'>
-<option value='NOTHING' style="width: 100%;">Select semester first...</option>
-<?php
-foreach($semesterBuilder as $row) {echo($row);}
-?>				
-</select>
-
+				<select name='DESTROY_PERIOD_FROM_SEMESTER' class="classestext" onchange='if(this.value != 0) {loading(); this.form.submit();}'>
+					<option value='NOTHING' style="width: 100%;">Select semester first...</option>
+					<?php
+					foreach($semesterBuilder as $row) {echo($row);}
+					?>				
+				</select>
 <?php
 if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER"])) {
 ?> 
-
-<select name='DESTROY_PERIOD' class="classestext">
-<option value='NOTHING' style="width: 100%;">Select a period from <?php echo($_POST["DESTROY_PERIOD_FROM_SEMESTER"]);?></option>
-<?php 
-foreach($periodBuilder as $row) {echo($row);} 
-?> 
-</select>
+				<select name='DESTROY_PERIOD' class="classestext">
+					<option value='NOTHING' style="width: 100%;">Select a period from <?php echo($_POST["DESTROY_PERIOD_FROM_SEMESTER"]);?></option>
+					<?php 
+					foreach($periodBuilder as $row) {echo($row);} 
+					?> 
+				</select>
 
 				<div class="padding"><button name="DELETE" type="submit" value="USER">Delete (Requires confirmation)</button></div>
 <?php 

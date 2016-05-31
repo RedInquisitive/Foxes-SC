@@ -90,7 +90,7 @@ $params["week"] = $_SESSION["WEEK_GLOBAL"];
 for($i = 1; $i <= 3; $i++) {
 	if($_SESSION["WEEK_GLOBAL"] > $i * 3) {
 		$quarry = $quarry . " OR WEEK = :week$i";
-		$params["week$i"] = ($i * 3) . "";
+		$params["week$i"] = ($i * 3 - 2) . "";
 	}
 }
 
@@ -121,7 +121,7 @@ foreach($all as $row) {
 		if($_SESSION["WEEK_GLOBAL"] > $i * 3) {
 			$canComputeNeedsToBe++;
 			foreach($alreadyHasData as $dataRow) {
-				if($dataRow["LINKED_ID"] === $row["ID"] && $dataRow["WEEK"] == ($i * 3) . "") {
+				if($dataRow["LINKED_ID"] === $row["ID"] && $dataRow["WEEK"] == ($i * 3 - 2) . "") {
 					$canCompute++;
 					if($dataRow["BENCH"] > 7) {
 						$repsLargerThanAdderForBench += 10;
