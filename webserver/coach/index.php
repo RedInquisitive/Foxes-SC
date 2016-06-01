@@ -14,6 +14,12 @@ include '/home/aj4057/config_iron.php'; #Connect to db.
 		document.getElementById("loading").style.display="block";
 	}
 	</script>
+	<style>
+	@media screen and (max-width: 999px) {
+    #dropdowns form {
+		width: 100%;
+	}
+	</style>
 </head>
 <body>
 <div id="navbar">
@@ -181,7 +187,7 @@ if($averages["POST_" . $wo]["M_AVERAGE"] == 0 || $averages["BASE_" . $wo]["M_AVE
 <?php
 }else{
 ?> 
-			<td><?php echo($averages["POST_" . $wo]["M_AVERAGE"] - $averages["BASE_" . $wo]["M_AVERAGE"]); ?></td></td>
+			<td><?php echo($averages["POST_" . $wo]["M_AVERAGE"] - $averages["BASE_" . $wo]["M_AVERAGE"]); ?></td>
 			<td><?php echo(round(($averages["POST_" . $wo]["M_AVERAGE"] - $averages["BASE_" . $wo]["M_AVERAGE"])/$averages["BASE_" . $wo]["M_AVERAGE"]*100,1,PHP_ROUND_HALF_UP) . "%"); ?></td>
 <?php
 }
@@ -199,7 +205,7 @@ if($averages["POST_" . $wo]["F_AVERAGE"] == 0 || $averages["BASE_" . $wo]["F_AVE
 <?php
 }else{
 ?> 
-			<td><?php echo($averages["POST_" . $wo]["F_AVERAGE"] - $averages["BASE_" . $wo]["F_AVERAGE"]); ?></td></td>
+			<td><?php echo($averages["POST_" . $wo]["F_AVERAGE"] - $averages["BASE_" . $wo]["F_AVERAGE"]); ?></td>
 			<td><?php echo(round(($averages["POST_" . $wo]["F_AVERAGE"] - $averages["BASE_" . $wo]["F_AVERAGE"])/$averages["BASE_" . $wo]["F_AVERAGE"]*100,1,PHP_ROUND_HALF_UP) . "%"); ?></td>
 <?php
 }
@@ -217,7 +223,7 @@ if($averages["POST_" . $wo]["TOTAL_AVERAGE"] == 0 || $averages["BASE_" . $wo]["T
 <?php
 }else{
 ?> 
-			<td><?php echo($averages["POST_" . $wo]["TOTAL_AVERAGE"] - $averages["BASE_" . $wo]["TOTAL_AVERAGE"]); ?></td></td>
+			<td><?php echo($averages["POST_" . $wo]["TOTAL_AVERAGE"] - $averages["BASE_" . $wo]["TOTAL_AVERAGE"]); ?></td>
 			<td><?php echo(round(($averages["POST_" . $wo]["TOTAL_AVERAGE"] - $averages["BASE_" . $wo]["TOTAL_AVERAGE"])/$averages["BASE_" . $wo]["TOTAL_AVERAGE"]*100,1,PHP_ROUND_HALF_UP) . "%"); ?></td>
 <?php
 }
@@ -230,7 +236,7 @@ if($averages["POST_" . $wo]["TOTAL_AVERAGE"] == 0 || $averages["BASE_" . $wo]["T
 ?>
 </div>
 <div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
-	<img style="margin: auto; display:block; padding-top:100px; width:400px;" src="../images/loading.gif"/>
+	<img style="margin: auto; display:block; padding-top:100px; width:60%; max-width: 400px;" src="../images/loading.gif"/>
 </div>
 <script> 
 var forms = document.getElementsByTagName('form');
