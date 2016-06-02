@@ -25,7 +25,7 @@ if(isset($_POST["DESTROY_SEMESTER_REAL"]) && isset($_POST["password"])) {
 	$row = $stmt->fetch();
 	
 	if(!(password_verify($_POST["password"], $row["PASSWORD"]))) {
-		$error = "When you tried to destroy the semester, the username or password was incorrect!"; 
+		$error = "When you tried to destroy the semester, the password was incorrect!"; 
 		break;
 	}
 	$stmt = $conn->prepare("DELETE FROM CLASS WHERE COACH = :coach AND SEMESTER = :semester");
@@ -60,6 +60,8 @@ if(isset($_POST["DESTROY_SEMESTER_REAL"]) && isset($_POST["password"])) {
 						 'semester' => $_POST["DESTROY_SEMESTER_REAL"]));
 						 
 	$editSuccess = "Done, the semester " . $_POST["DESTROY_SEMESTER_REAL"] . " is gone forever.";
+	unset($_SESSION["SEMESTER_GLOBAL"]);
+	unset($_SESSION["PERIOD_GLOBAL"]);
 }
 
 if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER_REAL"]) && isset($_POST["DESTROY_PERIOD_REAL"])  && isset($_POST["password"])) {
@@ -68,9 +70,47 @@ if(isset($_POST["DESTROY_PERIOD_FROM_SEMESTER_REAL"]) && isset($_POST["DESTROY_P
 	$row = $stmt->fetch();
 	
 	if(!(password_verify($_POST["password"], $row["PASSWORD"]))) {
-		$error = "When you tried to destroy the period, the username or password was incorrect!"; 
+		$error = "When you tried to destroy the period, the password was incorrect!"; 
 		break;
 	}
+	$stmt = $conn->prepare("DELETE FROM CLASS WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
+	$stmt->execute(array('coach' => $_SESSION['login_user'],
+						 'semester' => $_POST["DESTROY_PERIOD_FROM_SEMESTER_REAL"],
+						 'period' => $_POST["DESTROY_PERIOD_REAL"]));
+	
+	$stmt = $conn->prepare("SELECT ID FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
+	$stmt->execute(array('coach' => $_SESSION['login_user'],
+						 'semester' => $_POST["DESTROY_PERIOD_FROM_SEMESTER_REAL"],
+						 'period' => $_POST["DESTROY_PERIOD_REAL"]));
+	$all = $stmt->fetchAll();
+	
+	if($stmt->rowCount() > 0) {
+		$quarry = "DELETE FROM DATA WHERE ";
+		$params =  array();
+		$i = 0;
+		foreach($all as $row) {
+			if ($row !== end($all)) {
+				$quarry = $quarry . "LINKED_ID = :p$i OR ";
+				$params["p$i"] = $row["ID"];
+			} else {
+				$quarry = $quarry . "LINKED_ID = :p$i";
+				$params["p$i"] = $row["ID"];
+			}
+			$i++;
+		}
+		$stmt = $conn->prepare($quarry);
+		$stmt->execute($params);
+	}
+	
+	$stmt = $conn->prepare("DELETE FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
+	$stmt->execute(array('coach' => $_SESSION['login_user'],
+						 'semester' => $_POST["DESTROY_PERIOD_FROM_SEMESTER_REAL"],
+						 'period' => $_POST["DESTROY_PERIOD_REAL"]));
+						 
+						 
+	$editSuccess = "Done, the period " . $_POST["DESTROY_PERIOD_REAL"] . " is gone forever.";
+	unset($_SESSION["SEMESTER_GLOBAL"]);
+	unset($_SESSION["PERIOD_GLOBAL"]);
 }
 
 if((isset($_POST["CREATE_SEMESTER_NAME"]) || isset($_POST["CREATE_SEMESTER_SELECT"])) && isset($_POST["CREATE_SEMESTER_PERIOD"])) {

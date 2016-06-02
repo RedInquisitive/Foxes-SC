@@ -174,6 +174,7 @@ if(isset($_POST["WEEK_LOCAL"])) {
 			?> 
 
 			<h3 class="titlepadding">WARNING: Switching this field will clear any unsaved data below!</h3>
+			<h3 class="titlepadding">A star/green color represents saved data!</h3>
 				<select class="classestext" name='WEEK_LOCAL' onchange='if(this.value != 0) {loading(); this.form.submit();}'>
 <?php foreach($weekBuilder as $weeks) {echo($weeks);} ?> 
 				</select>
@@ -184,21 +185,21 @@ $stmt->execute(array('week' => $selectedWeek,
 					 'link' => $row["ID"]));
 $replace = $stmt->fetch();
 ?>
-			<h3 class="titlepadding">Bench Press</h3>
+			<h3 class="titlepadding">Bench Press (AMRAP)</h3>
 				<input class="text"
 					   type="number"
 					   name="BENCH"
 					   placeholder="<?php echo($replace["BENCH"]); ?>" 
 					   value="<?php echo($replace["BENCH"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Dead Lift</h3>
+			<h3 class="titlepadding">Dead Lift (AMRAP)</h3>
 				<input class="text"
 					   type="number"
 					   name="DEADLIFT"
 					   placeholder="<?php echo($replace["DEADLIFT"]); ?>" 
 					   value="<?php echo($replace["DEADLIFT"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Backsquat</h3>
+			<h3 class="titlepadding">Backsquat (AMRAP)</h3>
 				<input class="text"
 					   type="number"
 					   name="BACKSQUAT"
@@ -252,42 +253,42 @@ if($row["GENDER"] == "F") {
 			</select>
 			<br><br><br>
 			<h3 class="titlepadding">Set any of the fields below to 0 for "Not Entered"</h3>
-			<h3 class="titlepadding">Original Bench MAX</h3>
+			<h3 class="titlepadding">Pre Test Bench MAX (lbs)</h3>
 				<input class="text"
 					   type="number"
 					   name="BASE_BENCH"
 					   placeholder="<?php echo($row["BASE_BENCH"]); ?>" 
 					   value="<?php echo($row["BASE_BENCH"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Original Deadlift MAX</h3>
+			<h3 class="titlepadding">Pre Test Deadlift MAX (lbs)</h3>
 				<input class="text"
 					   type="number"
 					   name="BASE_DEADLIFT"
 					   placeholder="<?php echo($row["BASE_DEADLIFT"]); ?>" 
 					   value="<?php echo($row["BASE_DEADLIFT"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Original Squat MAX</h3>
+			<h3 class="titlepadding">Pre Test Squat MAX (lbs)</h3>
 				<input class="text"
 					   type="number"
 					   name="BASE_BACKSQUAT"
 					   placeholder="<?php echo($row["BASE_BACKSQUAT"]); ?>" 
-					   value="<?php echo($row["BASE_BACKSQUAT"]); ?>"><br>
+					   value="<?php echo($row["BASE_BACKSQUAT"]); ?>"><br><br><br>
 					   
-			<h3 class="titlepadding">Post Test Bench MAX</h3>
+			<h3 class="titlepadding">Post Test Bench MAX (lbs)</h3>
 				<input class="text"
 					   type="number"
 					   name="POST_BENCH"
 					   placeholder="<?php echo($row["POST_BENCH"]); ?>" 
 					   value="<?php echo($row["POST_BENCH"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Post Test Deadlift MAX</h3>
+			<h3 class="titlepadding">Post Test Deadlift MAX (lbs)</h3>
 				<input class="text"
 					   type="number"
 					   name="POST_DEADLIFT"
 					   placeholder="<?php echo($row["POST_DEADLIFT"]); ?>" 
 					   value="<?php echo($row["POST_DEADLIFT"]); ?>"><br>
 					   
-			<h3 class="titlepadding">Post Test Squat MAX</h3>
+			<h3 class="titlepadding">Post Test Squat MAX (lbs)</h3>
 				<input class="text"
 					   type="number"
 					   name="POST_BACKSQUAT"

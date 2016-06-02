@@ -133,11 +133,11 @@ if(!isset($_SESSION["SEMESTER_GLOBAL"]) || !isset($_SESSION["PERIOD_GLOBAL"]) ||
 	<?php
 	if(!isset($_SESSION["WEEK_GLOBAL"]) && $weekNeeded === TRUE) {
 	?>
-	<span>You must select a semester, a period, and a week from the top of this page in order to view its contents. If you have no periods or semesters yet, try creating some in the 'Modify Classes' tab. You can select any week 1-12.</span>
+	<span>Create a semester and period in the "Modify Classes" tab. Then select a semester and period from the top of the page. Finally, select any week 1-12.</span>
 	<?php
 	} else {
 	?>
-	<span>You must select a semester and a period from the top of this page in order to view its contents. If you have no periods or semesters yet, try creating some in the 'Modify Classes' tab.</span>
+	<span>Create a semester and period in the "Modify Classes" tab. Then select a semester and period from the top of the page!</span>
 	<?php
 	}
 	?>
