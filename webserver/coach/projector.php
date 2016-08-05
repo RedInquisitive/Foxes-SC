@@ -39,7 +39,8 @@ if((int)$_SESSION["WEEK_GLOBAL"] % 3 == "0") {
 	$adder = 0.1;
 }
 ?>
-<table>
+<div style="display: block; overflow: auto;" >
+<table style="margin-bottom: 0;">
 	<tr>
 		<th>Name</th>
 		<th colspan="4">Bench</th>
@@ -70,6 +71,7 @@ if($stmt->rowCount() == 0) {
 		<td colspan="13" style="text-align: center;">There is nobody here!</td>
 	</tr>
 </table>
+</div>
 <div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
 	<img style="margin: auto; display:block; padding-top:100px; width:60%; max-width: 400px;" src="../images/loading.gif"/>
 </div>
@@ -217,6 +219,7 @@ foreach($all as $row) {
 }
 ?>
 </table>
+</div>
 <div id="loading" style="width:100%; height:100%; position:fixed; top:0; left:0; background: rgba(0, 0, 0, 0.4); display:none">
 	<img style="margin: auto; display:block; padding-top:100px; width:60%; max-width: 400px;" src="../images/loading.gif"/>
 </div>

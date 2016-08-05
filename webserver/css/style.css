@@ -30,7 +30,7 @@ h3 {
 #login {
 	padding: 0 0 16px 0;
 	margin: 70px auto;
-	width:380px;
+	max-width:380px;
 	border-radius:10px;
 	font-family:helvetica;
 	border:2px solid #ccc;
@@ -184,11 +184,11 @@ input[type=submit].goodbutton:hover , button.goodbutton:hover, input[type=submit
 
 table {
     border-collapse: collapse;
-	width: 95%;
-	margin: 30px auto;
+	width: 98%;
+	margin: 50px auto;
 }
 table, th, td {
-    border: 2px solid black;
+    border: 1px solid gray;
 	padding: 3px 10px;
 	min-width: 50px;
 }
@@ -205,6 +205,15 @@ table th	{
 	font-size: 30px;
 	text-align: left;
 }
+table td {
+	font-size: 24px;
+}
+.huge th {
+	font-size: 30px;
+}
+.huge td {
+	font-size: 24px;
+}
 #speciallink {
 	background-color:#D00;	color:#fff;	border:2px solid #FF0000; padding:10px;	font-size:20px; cursor:pointer; border-radius:5px;
 }
@@ -213,7 +222,10 @@ table th	{
 }
 @media screen and (max-width: 1199px) {
 	table th {
-		font-size: 16px;
+		font-size: 20px;
+	}
+	table td {
+		font-size: 18px;
 	}
 	table th, table tr, table td {
 		min-width: 0 !important;
@@ -233,21 +245,16 @@ table th	{
 }
 
 @media screen and (max-width: 869px) {
-	table {
-		table-layout: fixed;
-		border: 0;
-		margin-left: auto;
-		margin-right: auto;
+	table th {
+		font-size: 12px;
 	}
-	tbody  {
-		display: block;
-		overflow: auto;
+	table td {
 		font-size: 14px;
-	}
-	table th, table tr, table td {
-		padding: 1px 3px;
 	}
 	.textheadlink {
 		font-size: 14px !important;
+	}
+	#login {
+		margin: 30px auto;
 	}
 }

@@ -83,15 +83,15 @@ if(isset($_SESSION['STUDENT_COACH']) && isset($_SESSION['STUDENT_SEMESTER'])) {
 			<form class="login" method="post">
 				<h3>What would you like to do?</h3>
 				<div class="padding">
-					<input class="goodbutton" type="submit" name="DO" value="View historical data">
 					<input class="goodbutton" type="submit" name="DO" value="View your workout">
 					<input class="goodbutton" type="submit" name="DO" value="Edit your AMRAPs">
 				</div>
 				<span id="error"><?php echo $error?></span>
+				<br>
 				<h3>General Information: </h3>
-				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Your coach: <?php echo $row["COACH"];?></h3>
-				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Your semester: <?php echo $row["SEMESTER"];?></h3>
-				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Your period: <?php echo $row["PERIOD"];?></h3>
+				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Coach: <?php echo $row["COACH"];?></h3>
+				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Semester: <?php echo $row["SEMESTER"];?></h3>
+				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Period: <?php echo $row["PERIOD"];?></h3>
 				<br>
 				<h3>Your Pre Test: </h3>
 				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Bench Press: <?php echo $row["BASE_BENCH"];?>lbs</h3>
@@ -99,9 +99,10 @@ if(isset($_SESSION['STUDENT_COACH']) && isset($_SESSION['STUDENT_SEMESTER'])) {
 				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Backsquat: <?php echo $row["BASE_BACKSQUAT"];?>lbs</h3>
 				<br>
 				<h3>Your Post Test: </h3>
-				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Bench Press: <?php echo ($row["POST_BENCH"] == 0 ? "Not taken yet." : $row["POST_BENCH"] . "lbs");?></h3>
-				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Deadlift: <?php echo ($row["POST_DEADLIFT"] == 0 ? "Not taken yet." : $row["POST_DEADLIFT"] . "lbs");?></h3>
-				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Backsquat: <?php echo ($row["POST_BACKSQUAT"] == 0 ? "Not taken yet." : $row["POST_BACKSQUAT"] . "lbs");?></h3>
+				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Bench Press: <?php echo ($row["POST_BENCH"] == 0 ? "None." : $row["POST_BENCH"] . "lbs");?></h3>
+				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Deadlift: <?php echo ($row["POST_DEADLIFT"] == 0 ? "None." : $row["POST_DEADLIFT"] . "lbs");?></h3>
+				<h3>&nbsp;&nbsp;&nbsp;&nbsp;Backsquat: <?php echo ($row["POST_BACKSQUAT"] == 0 ? "None." : $row["POST_BACKSQUAT"] . "lbs");?></h3>
+				<br>
 				<div class="padding">
 					<input type="submit" name="DO" value="Logout">
 				</div>
