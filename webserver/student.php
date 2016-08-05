@@ -1,46 +1,43 @@
 <?php
-// include '/home/aj4057/config.php'; #Define $servername $username $password $dbname and $configready here.
-// include '/home/aj4057/indexkeys.php'; #Index keys that are used. For example, Index::REQUEST is defined here.
+$error=""; #Variable To Store Error Message
+include '/home/aj4057/config_iron.php'; #Define $servername $username $password $dbname and $configready here.
+session_start(); #Starting Session
 
-// do {
-// session_start(); #Starting Session
-// $error=''; #Variable To Store Error Message
+do {
+if($error !== "") {
+	break;
+}
+if (!empty($_POST)) {
+	if(!(array_key_exists("student_id",$_POST))) {
+		$error = "You need to enter a Student ID.";
+		break;
+	}
+	
+	if($_POST["student_id"] === '') {
+		$error = "You need to enter a Student ID.";
+		break;
+	}
+	
+	$stmt = $conn->prepare("SELECT STUDENT_ID FROM STUDENT$ WHERE STUDENT_ID = :student_id");
+	$stmt->execute(array('student_id' => $_POST["student_id"]));
+	$row = $stmt->fetch();
+	
+	
+	
+	if($stmt->rowCount() > 0) {
+		$_SESSION['login_user'] = $row["STUDENT_ID"]; #Initializing Session
+		$_SESSION['timestamp'] = date("Y-m-d H:i:s");
+		$_SESSION['valid'] = "Student";	
+	} else {
+		$error = "It appears you don't have an account. Check with your coach to see if you are added to the database!";
+	}
+}
 
-// try {
-	// $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password); #login
-	// $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); #Enable errors
-// } catch(PDOException $e) {
-	// $error = "Could not connect to the database. This should never happen.";
-	// break;
-// }
-
-// if (!empty($_POST)) {
-	// if(!(array_key_exists(Student::ID,$_POST))) {
-		// $error = "You need to enter a Student ID";
-		// break;
-	// }
-	// if($_POST[Student::ID] === '') {
-		// $error = "You need to enter a Student ID";
-		// break;
-	// }
-	// $stmt = $conn->prepare("SELECT STUDENT_ID FROM STUDENT WHERE STUDENT_ID = :id"); #select data
-	// $stmt->execute(array('id' => $_POST[Student::ID])); #based on the ID
-	// $row = $stmt->fetch();
-	// if($row["STUDENT_ID"] !== $_POST[Student::ID]) {
-		// $error = "The username or password is incorrect!"; #Deny it.
-		// break;
-	// }
-	// $_SESSION['login_user'] = $row["STUDENT_ID"]; #Initializing Session
-	// $_SESSION['timestamp'] = date("Y-m-d H:i:s"); #Initializing Session
-	// $_SESSION['valid'] = "Student";
-	// header("location: student/index.php"); #Redirecting To Other Page
-	// $conn = null;
-// }
-
-// if(isset($_SESSION['login_user']) && $_SESSION['valid'] = "Student"){
-	// header("location: student/index.php");
-// }
-// } while (0); #but it works!
+if(isset($_SESSION['login_user']) && $_SESSION['valid'] === "Student"){
+	header("location: /student/index.php");
+	die();
+}
+} while (0); #but it works!
 ?>
 <!DOCTYPE html>
 <html>

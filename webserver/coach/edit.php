@@ -54,12 +54,13 @@ if(isset($_POST["WEEK_LOCAL"]) && isset($_POST["BENCH"]) && isset($_POST["DEADLI
 if(isset($_POST["NAME"]) && isset($_POST["STUDENT_ID"]) && isset($_POST["GENDER"]) &&
    isset($_POST["BASE_DEADLIFT"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POST["BASE_BENCH"]) &&
    isset($_POST["POST_DEADLIFT"]) && isset($_POST["POST_BACKSQUAT"]) && isset($_POST["POST_BENCH"])) {
-	$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE STUDENT_ID = :id AND COACH = :coach");
+	$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE STUDENT_ID = :id AND COACH = :coach  AND SEMESTER = :semester");
 	$stmt->execute(array('id' => $_POST["STUDENT_ID"],
-						 'coach' => $_SESSION['login_user']));
+						 'coach' => $_SESSION['login_user'],
+						 'semester' => $_SESSION["SEMESTER_GLOBAL"]));
 	$exists = $stmt->fetch();
 	if(isset($exists["NAME"]) && $exists["ID"] != $row["ID"]) {
-		$editError = $exists["NAME"] . " already uses the Student ID " . $exists["STUDENT_ID"] . "!";
+		$editError = $exists["NAME"] . " already uses the Student ID " . $exists["STUDENT_ID"] . " in period " . $exists["PERIOD"] . "! Try switching to a new semester instead.";
 		break;
 	}
 	if(!is_numeric($_POST["BASE_BENCH"]) || !is_numeric($_POST["BASE_BACKSQUAT"]) || !is_numeric($_POST["BASE_DEADLIFT"]) ||

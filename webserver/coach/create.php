@@ -13,12 +13,13 @@ if(isset($_POST["BASE_BENCH"]) && isset($_POST["BASE_BACKSQUAT"]) && isset($_POS
 		break;
 	}
 	
-	$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE STUDENT_ID = :id AND COACH = :coach");
+	$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE STUDENT_ID = :id AND COACH = :coach AND SEMESTER = :semester");
 	$stmt->execute(array('id' => $_POST["STUDENT_ID"],
-						 'coach' => $_SESSION['login_user']));
+						 'coach' => $_SESSION['login_user'],
+						 'semester' => $_SESSION["SEMESTER_GLOBAL"]));
 	$row = $stmt->fetch();
 	if(isset($row["NAME"])) {
-		$editError = $row["NAME"] . " already uses the Student ID " . $row["STUDENT_ID"] . "!";
+		$editError = $row["NAME"] . " already uses the Student ID " . $row["STUDENT_ID"] . " in period " . $row["PERIOD"] . "! Try switching to a new semester instead.";
 		break;
 	}
 	

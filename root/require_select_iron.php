@@ -2,6 +2,7 @@
 if (!isset ($_SESSION)) session_start();  #Starting Session
 if(isset($_POST["SEMESTER_GLOBAL"]) && $_POST["SEMESTER_GLOBAL"] !== "NOTHING") {
 	$_SESSION["SEMESTER_GLOBAL"] = $_POST["SEMESTER_GLOBAL"];
+	unset($_SESSION["PERIOD_GLOBAL"]);
 }
 if(isset($_POST["PERIOD_GLOBAL"]) && $_POST["PERIOD_GLOBAL"] !== "NOTHING") {
 	$_SESSION["PERIOD_GLOBAL"] = $_POST["PERIOD_GLOBAL"];
