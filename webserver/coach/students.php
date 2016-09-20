@@ -103,7 +103,7 @@ if(isset($_POST["DELETE"])) {
 			<th colspan="2" style="min-width: 150px !important;">Actions</th>
 		</tr>
 <?php
-$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
+$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period ORDER BY RIGHT(TRIM(NAME), LOCATE(' ', REVERSE(TRIM(NAME))) - 1)");
 $stmt->execute(array('coach' => $_SESSION['login_user'],
 					 'semester' => $_SESSION["SEMESTER_GLOBAL"],
 					 'period' => $_SESSION["PERIOD_GLOBAL"]));

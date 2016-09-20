@@ -86,7 +86,7 @@ if($key !== FALSE) {
 	$selectedWeek . '</option>';
 }
 
-$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period");
+$stmt = $conn->prepare("SELECT * FROM STUDENT$ WHERE COACH = :coach AND SEMESTER = :semester AND PERIOD = :period ORDER BY RIGHT(TRIM(NAME), LOCATE(' ', REVERSE(TRIM(NAME))) - 1)");
 $stmt->execute(array('coach' => $_SESSION['login_user'],
 					 'semester' => $_SESSION["SEMESTER_GLOBAL"],
 					 'period' => $_SESSION["PERIOD_GLOBAL"]));
@@ -209,10 +209,10 @@ if($usingTemp === "YES") {
 					?>
 				</td>
 				<td>
-					<h3 class="titlepadding">Dead Lift</h3>
-					<input class="text" 		type="number" 		name="DEADLIFT" 		placeholder="Enter Reps Here"><br>
 					<h3 class="titlepadding">Bench</h3>
 					<input class="text" 		type="number" 		name="BENCH" 			placeholder="Enter Reps Here"><br>
+					<h3 class="titlepadding">Dead Lift</h3>
+					<input class="text" 		type="number" 		name="DEADLIFT" 		placeholder="Enter Reps Here"><br>
 					<h3 class="titlepadding">Squat</h3>
 					<input class="text" 		type="number" 		name="SQUAT" 			placeholder="Enter Reps Here"><br>
 					<h3 class="titlepadding">Student ID</h3>
