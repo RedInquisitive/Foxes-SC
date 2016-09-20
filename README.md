@@ -90,6 +90,8 @@ ALTER TABLE `STUDENT$`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID of the student in this table', AUTO_INCREMENT=1;
 ```
 
+### Notes
+
 You'll need a basic LAMP (or FAMP, or WAMP, or whatever, as long as you have PHP, Apache, and MySQL) stack. From there, it's simply setting the login in the PHP configuration, playing wack-a-mole with the source code and then voilà, it should work!
 
 WARNING: Requires expert level knowledge in PHP and MySQL!
