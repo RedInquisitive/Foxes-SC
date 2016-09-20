@@ -96,7 +96,7 @@ You'll need a basic LAMP (or FAMP, or WAMP, or whatever, as long as you have PHP
 
 WARNING: Requires expert level knowledge in PHP and MySQL!
 
-WARNING: The code is not organized. If you find one thing broken, it's most likely copied and pasted in other files. This is a really bad example of how to 
+WARNING: The code is not organized. If you find one thing broken, it's most likely copied and pasted in other files. This is a really bad example of how to code!
 
 WARNING: There are nearly zero comments in this code... but perhaps it'll be useful to somebody!
 
